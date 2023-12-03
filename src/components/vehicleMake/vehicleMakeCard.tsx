@@ -27,18 +27,21 @@ const VehicleMakeCard = ({ make }: VehicleMakeCardProps) => {
         </div>
       </CardHeader>
 
-      <div className="flex flex-col items-center gap-2">
+      <div className="flex z-10 flex-col items-center gap-2">
         <Button
+          variant={"secondary"}
           onClick={handleDelete}
           size={"sm"}
-          className="rounded-none rounded-tl-xl rounded-bl-xl bg-primary border-none shadow-none"
+          className="rounded-none rounded-tl-xl rounded-bl-xl border-none shadow-none"
         >
-          <X className="h-4 w-4 text-background" />
+          <X className="h-4 w-4" />
         </Button>
-        <Button size={"sm"} className="rounded-none rounded-tl-xl rounded-bl-xl bg-primary border-none shadow-none">
-          <Edit className="h-4 w-4 text-background" />
+        <Button variant={"secondary"} size={"sm"} className="rounded-none rounded-tl-xl rounded-bl-xl  border-none shadow-none">
+          <Edit className="h-4 w-4" />
         </Button>
       </div>
+
+      <div className="absolute h-full w-1/4 bg-gradient-to-r blur-3xl opacity-90 from-fuchsia-600 to-pink-600 right-0" />
     </Card>
   );
 };

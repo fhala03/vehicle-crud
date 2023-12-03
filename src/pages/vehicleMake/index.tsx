@@ -25,7 +25,9 @@ const VehicleMakePage = observer(() => {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between">
-        <Button onClick={handleSortChange}>Sort from {isSortingAZ ? "Z-A" : "A-Z"}</Button>
+        <Button variant={"secondary"} onClick={handleSortChange}>
+          Sort from {isSortingAZ ? "Z-A" : "A-Z"}
+        </Button>
         <AddVehicleMake />
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

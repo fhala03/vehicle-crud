@@ -36,7 +36,7 @@ const AddVehicleMake = observer(() => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild className="flex">
-        <Button>Add makes</Button>
+        <Button variant={"secondary"}>Add makes</Button>
       </DialogTrigger>
       <DialogContent className="border shadow-xl dark:border-muted/50">
         <DialogHeader className="flex flex-col gap-2">
