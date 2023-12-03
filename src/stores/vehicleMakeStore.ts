@@ -1,6 +1,6 @@
 import { makeObservable, observable, action, runInAction } from "mobx";
 import { VehicleMakeType } from "@/utils/types";
-import { onSnapshot, collection } from "firebase/firestore";
+import { onSnapshot, collection, query, orderBy, getDocs } from "firebase/firestore";
 import { createDoc, deleteDocById, updateDocById } from "@/services/network/base";
 import { db } from "@/services/firebase";
 
@@ -40,6 +40,40 @@ export class VehicleMakeStore {
       await updateDocById("vehicleMake", id, newFields);
     } catch (error) {
       console.error("Error updating make:", error);
+    }
+  }
+
+  async fetchMakesSortedAZ() {
+    try {
+      const makesCollection = collection(db, "vehicleMake");
+      const makesQuery = query(makesCollection, orderBy("name", "asc"));
+      const makesSnapshot = await getDocs(makesQuery);
+
+      runInAction(() => {
+        this.makes = makesSnapshot.docs.map((doc) => ({
+          ...(doc.data() as VehicleMakeType),
+          id: doc.id,
+        }));
+      });
+    } catch (error) {
+      console.error("Error fetching makes:", error);
+    }
+  }
+
+  async fetchMakesSortedZA() {
+    try {
+      const makesCollection = collection(db, "vehicleMake");
+      const makesQuery = query(makesCollection, orderBy("name", "desc"));
+      const makesSnapshot = await getDocs(makesQuery);
+
+      runInAction(() => {
+        this.makes = makesSnapshot.docs.map((doc) => ({
+          ...(doc.data() as VehicleMakeType),
+          id: doc.id,
+        }));
+      });
+    } catch (error) {
+      console.error("Error fetching makes:", error);
     }
   }
 
