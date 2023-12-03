@@ -19,7 +19,7 @@ export class VehicleMakeStore {
     this.fetchMakes();
   }
 
-  async addMake(newMake: VehicleMakeType) {
+  async addMake(newMake: Omit<VehicleMakeType, "id">) {
     try {
       await createDoc({ collectionName: "vehicleMake", doc: newMake });
     } catch (error) {
@@ -48,7 +48,10 @@ export class VehicleMakeStore {
       const makesCollection = collection(db, "vehicleMake");
       const unsubscribe = onSnapshot(makesCollection, (snapshot) => {
         runInAction(() => {
-          this.makes = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() } as VehicleMakeType));
+          this.makes = snapshot.docs.map((doc) => ({
+            ...(doc.data() as VehicleMakeType),
+            id: doc.id,
+          }));
         });
       });
 
