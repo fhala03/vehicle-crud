@@ -1,6 +1,6 @@
 import { makeObservable, observable, action, runInAction } from "mobx";
 import { VehicleModelType } from "@/utils/types";
-import { onSnapshot, collection, query, orderBy, getDocs, getDoc, doc } from "firebase/firestore";
+import { onSnapshot, collection, query, orderBy, getDocs, getDoc, doc, where } from "firebase/firestore";
 import { createDoc, deleteDocById, updateDocById } from "@/services/network/base";
 import { db } from "@/services/firebase";
 
@@ -52,6 +52,23 @@ export class VehicleModelStore {
     } catch (error) {
       console.error("Error fetching model by id:", error);
       return null;
+    }
+  }
+
+  async fetchModelsByMake(makeId: string) {
+    try {
+      const modelsCollection = collection(db, "vehicleModel");
+      const modelsQuery = query(modelsCollection, where("makeId", "==", makeId));
+      const modelsSnapshot = await getDocs(modelsQuery);
+
+      runInAction(() => {
+        this.models = modelsSnapshot.docs.map((doc) => ({
+          ...(doc.data() as VehicleModelType),
+          id: doc.id,
+        }));
+      });
+    } catch (error) {
+      console.error("Error fetching models by make:", error);
     }
   }
 
