@@ -1,6 +1,8 @@
 import { makeObservable, observable, action, runInAction } from "mobx";
 import { VehicleModelType } from "@/utils/types";
-import { createDoc, deleteDocById, updateDocById } from "@/services/network/base";
+import { deleteDocById, updateDocById } from "@/services/network/base";
+import { addDoc, collection, onSnapshot } from "firebase/firestore";
+import { db } from "@/services/firebase";
 
 export class VehicleModelStore {
   models: VehicleModelType[] = [];
@@ -14,11 +16,15 @@ export class VehicleModelStore {
     });
   }
 
-  async addModel(newModel: VehicleModelType) {
+  async addModel(model: Omit<VehicleModelType, "id">) {
     try {
-      await createDoc({ collectionName: "vehicleModels", doc: newModel });
+      const docRef = await addDoc(collection(db, "vehicleModel"), model);
+
       runInAction(() => {
-        this.models.push(newModel);
+        this.models.push({
+          ...(model as VehicleModelType),
+          id: docRef.id,
+        });
       });
     } catch (error) {
       console.error("Error adding model:", error);
@@ -27,7 +33,7 @@ export class VehicleModelStore {
 
   async deleteModel(id: string) {
     try {
-      await deleteDocById("vehicleModels", id);
+      await deleteDocById("vehicleModel", id);
       runInAction(() => {
         this.models = this.models.filter((model) => model.id !== id);
       });
@@ -38,7 +44,7 @@ export class VehicleModelStore {
 
   async updateModel(id: string, newFields: Record<string, any>) {
     try {
-      await updateDocById("vehicleModels", id, newFields);
+      await updateDocById("vehicleModel", id, newFields);
       runInAction(() => {
         const modelIndex = this.models.findIndex((model) => model.id === id);
         if (modelIndex !== -1) {
@@ -47,6 +53,24 @@ export class VehicleModelStore {
       });
     } catch (error) {
       console.error("Error updating model:", error);
+    }
+  }
+
+  async fetchModels() {
+    try {
+      const makesCollection = collection(db, "vehicleModel");
+      const unsubscribe = onSnapshot(makesCollection, (snapshot) => {
+        runInAction(() => {
+          this.models = snapshot.docs.map((doc) => ({
+            ...(doc.data() as VehicleModelType),
+            id: doc.id,
+          }));
+        });
+      });
+
+      return unsubscribe;
+    } catch (error) {
+      console.error("Error fetching makes:", error);
     }
   }
 }

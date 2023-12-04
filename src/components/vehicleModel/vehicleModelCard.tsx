@@ -1,19 +1,19 @@
-import { VehicleMakeType } from "@/utils/types";
+import { VehicleModelType } from "@/utils/types";
 import { Card, CardHeader } from "../ui/card";
 import { Button } from "../ui/button";
 import { Edit, X } from "lucide-react";
 import { useRootStore } from "@/stores/rootStore";
 
-interface VehicleMakeCardProps {
-  make: VehicleMakeType;
+interface VehicleModelCardProps {
+  model: VehicleModelType;
 }
 
-const VehicleMakeCard = ({ make }: VehicleMakeCardProps) => {
-  const { vehicleMakeStore } = useRootStore();
+const VehicleModelCard = ({ model }: VehicleModelCardProps) => {
+  const { vehicleModelStore } = useRootStore();
 
   const handleDelete = async () => {
-    if (make.id) {
-      await vehicleMakeStore.deleteMake(make.id);
+    if (model.id) {
+      await vehicleModelStore.deleteModel(model.id);
     }
   };
 
@@ -21,9 +21,8 @@ const VehicleMakeCard = ({ make }: VehicleMakeCardProps) => {
     <Card className="shadow-none h-[150px] relative flex items-center justify-between overflow-hidden">
       <CardHeader>
         <div className="flex flex-col">
-          <span className="font-medium text-lg">{make.name}</span>
-          <span className="text-sm">{make.abrv}</span>
-          <span className="text-sm">{make.id}</span>
+          <span className="font-medium text-lg">{model.name}</span>
+          <span className="text-sm">{model.abrv}</span>
         </div>
       </CardHeader>
 
@@ -46,4 +45,4 @@ const VehicleMakeCard = ({ make }: VehicleMakeCardProps) => {
   );
 };
 
-export default VehicleMakeCard;
+export default VehicleModelCard;
