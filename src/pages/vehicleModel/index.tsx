@@ -29,8 +29,8 @@ const VehicleModelsPage = observer(() => {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex items-center justify-between">
-        <div className="flex gap-2 items-center">
+      <div className="flex flex-col md:flex-row md:items-center gap-2 justify-between">
+        <div className="flex md:gap-4 items-center justify-between">
           <Button variant={"secondary"} onClick={handleSortChange}>
             Sort from {isSortingAZ ? "Z-A" : "A-Z"}
           </Button>
