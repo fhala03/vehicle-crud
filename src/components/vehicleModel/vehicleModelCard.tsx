@@ -1,15 +1,29 @@
-import { VehicleModelType } from "@/utils/types";
+import { useState, useEffect } from "react";
+import { observer } from "mobx-react";
 import { Card, CardHeader } from "../ui/card";
 import { Button } from "../ui/button";
 import { Edit, X } from "lucide-react";
 import { useRootStore } from "@/stores/rootStore";
+import { VehicleModelType } from "@/utils/types";
 
 interface VehicleModelCardProps {
   model: VehicleModelType;
 }
 
-const VehicleModelCard = ({ model }: VehicleModelCardProps) => {
-  const { vehicleModelStore } = useRootStore();
+const VehicleModelCard = observer(({ model }: VehicleModelCardProps) => {
+  const { vehicleModelStore, vehicleMakeStore } = useRootStore();
+  const [makeName, setMakeName] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchMakeName = async () => {
+      if (model.makeId) {
+        const make = await vehicleMakeStore.getMakeById(model.makeId);
+        setMakeName(make?.name || null);
+      }
+    };
+
+    fetchMakeName();
+  }, [model.makeId, vehicleMakeStore]);
 
   const handleDelete = async () => {
     if (model.id) {
@@ -23,6 +37,7 @@ const VehicleModelCard = ({ model }: VehicleModelCardProps) => {
         <div className="flex flex-col">
           <span className="font-medium text-lg">{model.name}</span>
           <span className="text-sm">{model.abrv}</span>
+          {makeName && <span className="text-sm">{makeName}</span>}
         </div>
       </CardHeader>
 
@@ -43,6 +58,6 @@ const VehicleModelCard = ({ model }: VehicleModelCardProps) => {
       <div className="absolute h-full w-1/4 bg-gradient-to-r blur-3xl opacity-90 from-fuchsia-600 to-pink-600 right-0" />
     </Card>
   );
-};
+});
 
 export default VehicleModelCard;

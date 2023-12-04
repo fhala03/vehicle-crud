@@ -1,6 +1,6 @@
 import { makeObservable, observable, action, runInAction } from "mobx";
 import { VehicleMakeType } from "@/utils/types";
-import { onSnapshot, collection, query, orderBy, getDocs } from "firebase/firestore";
+import { onSnapshot, collection, query, orderBy, getDocs, getDoc, doc } from "firebase/firestore";
 import { createDoc, deleteDocById, updateDocById } from "@/services/network/base";
 import { db } from "@/services/firebase";
 
@@ -40,6 +40,16 @@ export class VehicleMakeStore {
       await updateDocById("vehicleMake", id, newFields);
     } catch (error) {
       console.error("Error updating make:", error);
+    }
+  }
+
+  async getMakeById(id: string): Promise<VehicleMakeType | null> {
+    try {
+      const makeDoc = await getDoc(doc(db, "vehicleMake", id));
+      return makeDoc.exists() ? { ...(makeDoc.data() as VehicleMakeType), id: makeDoc.id } : null;
+    } catch (error) {
+      console.error("Error fetching make by id:", error);
+      return null;
     }
   }
 
