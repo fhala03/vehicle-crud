@@ -1,7 +1,7 @@
 import { makeObservable, observable, action, runInAction } from "mobx";
 import { VehicleModelType } from "@/utils/types";
-import { deleteDocById, updateDocById } from "@/services/network/base";
-import { addDoc, collection, onSnapshot } from "firebase/firestore";
+import { onSnapshot, collection, query, orderBy, getDocs, getDoc, doc } from "firebase/firestore";
+import { createDoc, deleteDocById, updateDocById } from "@/services/network/base";
 import { db } from "@/services/firebase";
 
 export class VehicleModelStore {
@@ -13,19 +13,17 @@ export class VehicleModelStore {
       addModel: action,
       deleteModel: action,
       updateModel: action,
+      fetchModels: action,
+      fetchModelsSortedAZ: action,
+      fetchModelsSortedZA: action,
     });
+
+    this.fetchModels();
   }
 
-  async addModel(model: Omit<VehicleModelType, "id">) {
+  async addModel(newModel: Omit<VehicleModelType, "id">) {
     try {
-      const docRef = await addDoc(collection(db, "vehicleModel"), model);
-
-      runInAction(() => {
-        this.models.push({
-          ...(model as VehicleModelType),
-          id: docRef.id,
-        });
-      });
+      await createDoc({ collectionName: "vehicleModel", doc: newModel });
     } catch (error) {
       console.error("Error adding model:", error);
     }
@@ -34,9 +32,6 @@ export class VehicleModelStore {
   async deleteModel(id: string) {
     try {
       await deleteDocById("vehicleModel", id);
-      runInAction(() => {
-        this.models = this.models.filter((model) => model.id !== id);
-      });
     } catch (error) {
       console.error("Error deleting model:", error);
     }
@@ -45,21 +40,59 @@ export class VehicleModelStore {
   async updateModel(id: string, newFields: Record<string, any>) {
     try {
       await updateDocById("vehicleModel", id, newFields);
-      runInAction(() => {
-        const modelIndex = this.models.findIndex((model) => model.id === id);
-        if (modelIndex !== -1) {
-          this.models[modelIndex] = { ...this.models[modelIndex], ...newFields };
-        }
-      });
     } catch (error) {
       console.error("Error updating model:", error);
     }
   }
 
+  async getModelById(id: string): Promise<VehicleModelType | null> {
+    try {
+      const modelDoc = await getDoc(doc(db, "vehicleModel", id));
+      return modelDoc.exists() ? { ...(modelDoc.data() as VehicleModelType), id: modelDoc.id } : null;
+    } catch (error) {
+      console.error("Error fetching model by id:", error);
+      return null;
+    }
+  }
+
+  async fetchModelsSortedAZ() {
+    try {
+      const modelsCollection = collection(db, "vehicleModel");
+      const modelsQuery = query(modelsCollection, orderBy("name", "asc"));
+      const modelsSnapshot = await getDocs(modelsQuery);
+
+      runInAction(() => {
+        this.models = modelsSnapshot.docs.map((doc) => ({
+          ...(doc.data() as VehicleModelType),
+          id: doc.id,
+        }));
+      });
+    } catch (error) {
+      console.error("Error fetching models:", error);
+    }
+  }
+
+  async fetchModelsSortedZA() {
+    try {
+      const modelsCollection = collection(db, "vehicleModel");
+      const modelsQuery = query(modelsCollection, orderBy("name", "desc"));
+      const modelsSnapshot = await getDocs(modelsQuery);
+
+      runInAction(() => {
+        this.models = modelsSnapshot.docs.map((doc) => ({
+          ...(doc.data() as VehicleModelType),
+          id: doc.id,
+        }));
+      });
+    } catch (error) {
+      console.error("Error fetching models:", error);
+    }
+  }
+
   async fetchModels() {
     try {
-      const makesCollection = collection(db, "vehicleModel");
-      const unsubscribe = onSnapshot(makesCollection, (snapshot) => {
+      const modelsCollection = collection(db, "vehicleModel");
+      const unsubscribe = onSnapshot(modelsCollection, (snapshot) => {
         runInAction(() => {
           this.models = snapshot.docs.map((doc) => ({
             ...(doc.data() as VehicleModelType),
@@ -70,7 +103,7 @@ export class VehicleModelStore {
 
       return unsubscribe;
     } catch (error) {
-      console.error("Error fetching makes:", error);
+      console.error("Error fetching models:", error);
     }
   }
 }
