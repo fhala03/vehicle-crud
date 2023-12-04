@@ -1,8 +1,7 @@
 import { makeObservable, observable, action, runInAction } from "mobx";
 import { VehicleMakeType } from "@/utils/types";
-import { onSnapshot, collection, query, orderBy, getDocs, getDoc, doc } from "firebase/firestore";
-import { createDoc, deleteDocById, updateDocById } from "@/services/network/base";
-import { db } from "@/services/firebase";
+
+import { createDoc, deleteDocById, getDocById, getDocsSorted, onSnapshotListener, updateDocById } from "@/services/network/base";
 
 export class VehicleMakeStore {
   makes: VehicleMakeType[] = [];
@@ -44,64 +43,31 @@ export class VehicleMakeStore {
   }
 
   async getMakeById(id: string): Promise<VehicleMakeType | null> {
-    try {
-      const makeDoc = await getDoc(doc(db, "vehicleMake", id));
-      return makeDoc.exists() ? { ...(makeDoc.data() as VehicleMakeType), id: makeDoc.id } : null;
-    } catch (error) {
-      console.error("Error fetching make by id:", error);
-      return null;
-    }
+    return await getDocById("vehicleMake", id);
   }
 
   async fetchMakesSortedAZ() {
-    try {
-      const makesCollection = collection(db, "vehicleMake");
-      const makesQuery = query(makesCollection, orderBy("name", "asc"));
-      const makesSnapshot = await getDocs(makesQuery);
-
-      runInAction(() => {
-        this.makes = makesSnapshot.docs.map((doc) => ({
-          ...(doc.data() as VehicleMakeType),
-          id: doc.id,
-        }));
-      });
-    } catch (error) {
-      console.error("Error fetching makes:", error);
-    }
+    runInAction(async () => {
+      this.makes = await getDocsSorted<VehicleMakeType>("vehicleMake", "name", "asc");
+    });
   }
 
   async fetchMakesSortedZA() {
-    try {
-      const makesCollection = collection(db, "vehicleMake");
-      const makesQuery = query(makesCollection, orderBy("name", "desc"));
-      const makesSnapshot = await getDocs(makesQuery);
+    runInAction(async () => {
+      this.makes = await getDocsSorted<VehicleMakeType>("vehicleMake", "name", "desc");
+    });
+  }
 
+  async fetchMakes() {
+    const unsubscribe = onSnapshotListener("vehicleMake", (snapshot) => {
       runInAction(() => {
-        this.makes = makesSnapshot.docs.map((doc) => ({
+        this.makes = snapshot.docs.map((doc: { data: () => VehicleMakeType; id: any }) => ({
           ...(doc.data() as VehicleMakeType),
           id: doc.id,
         }));
       });
-    } catch (error) {
-      console.error("Error fetching makes:", error);
-    }
-  }
+    });
 
-  async fetchMakes() {
-    try {
-      const makesCollection = collection(db, "vehicleMake");
-      const unsubscribe = onSnapshot(makesCollection, (snapshot) => {
-        runInAction(() => {
-          this.makes = snapshot.docs.map((doc) => ({
-            ...(doc.data() as VehicleMakeType),
-            id: doc.id,
-          }));
-        });
-      });
-
-      return unsubscribe;
-    } catch (error) {
-      console.error("Error fetching makes:", error);
-    }
+    return unsubscribe;
   }
 }
