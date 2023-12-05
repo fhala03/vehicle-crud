@@ -70,4 +70,18 @@ export class VehicleMakeStore {
 
     return unsubscribe;
   }
+
+  async getMakeDetailsById(id: string): Promise<Pick<VehicleMakeType, "id" | "name" | "abrv"> | null> {
+    try {
+      const make = await this.getMakeById(id);
+      if (make) {
+        const { id, name, abrv } = make;
+        return { id, name, abrv };
+      }
+      return null;
+    } catch (error) {
+      console.error("Error fetching make details by id:", error);
+      return null;
+    }
+  }
 }

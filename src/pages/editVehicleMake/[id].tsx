@@ -1,9 +1,61 @@
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
+import EditVehicleName from "@/components/vehicleMake/editVehicleName";
+import { useRootStore } from "@/stores/rootStore";
+import { VehicleMakeType } from "@/utils/types";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 const EditVehicleMake = () => {
   const { id } = useParams();
 
-  return <div>EditVehicleMake: {id}</div>;
+  const { vehicleMakeStore } = useRootStore();
+  const [makeDetails, setMakeDetails] = useState<Pick<VehicleMakeType, "id" | "name" | "abrv"> | null>(null);
+
+  useEffect(() => {
+    const fetchMakeDetails = async () => {
+      const details = await vehicleMakeStore.getMakeDetailsById(id as string);
+      setMakeDetails(details);
+    };
+
+    fetchMakeDetails();
+  }, [id, vehicleMakeStore]);
+
+  return (
+    <main>
+      <section className="flex flex-col gap-4">
+        <div className="flex flex-col gap-2">
+          <span className="text-2xl font-bold dark:text-foreground">General</span>
+          <Separator className="opacity-40" />
+        </div>
+
+        <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-2">
+            <h1>Make ID</h1>
+            <div className="flex w-full gap-2">
+              <Input aria-label="vehicleMakeId" value={makeDetails?.id} readOnly className="w-full shadow-none" />
+            </div>
+          </div>
+          <div className="flex flex-col gap-2">
+            <h1>Make name</h1>
+            <div className="flex w-full gap-2">
+              <Input aria-label="vehicleMakeName" readOnly value={makeDetails?.name} className="w-full shadow-none" />
+              <EditVehicleName makeId={makeDetails?.id as string} />
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <h1>Make abbreviation</h1>
+            <div className="flex w-full gap-2">
+              <Input aria-label="vehicleMakeAbrv" readOnly value={makeDetails?.abrv} className="w-full shadow-none" />
+              <Button>Edit</Button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  );
 };
 
 export default EditVehicleMake;
