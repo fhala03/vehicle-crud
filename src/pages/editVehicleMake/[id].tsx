@@ -1,7 +1,8 @@
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
+import EditVehicleAbrv from "@/components/vehicleMake/editVehicleAbrv";
 import EditVehicleName from "@/components/vehicleMake/editVehicleName";
+import { onSnapshotListener } from "@/services/network/base";
 import { useRootStore } from "@/stores/rootStore";
 import { VehicleMakeType } from "@/utils/types";
 import { useEffect, useState } from "react";
@@ -14,12 +15,14 @@ const EditVehicleMake = () => {
   const [makeDetails, setMakeDetails] = useState<Pick<VehicleMakeType, "id" | "name" | "abrv"> | null>(null);
 
   useEffect(() => {
-    const fetchMakeDetails = async () => {
-      const details = await vehicleMakeStore.getMakeDetailsById(id as string);
-      setMakeDetails(details);
-    };
+    const unsubscribe = onSnapshotListener("vehicleMake", (snapshot) => {
+      const updatedMake = snapshot.docs.find((doc: { id: string | undefined }) => doc.id === id);
+      updatedMake && setMakeDetails(updatedMake.data() as VehicleMakeType);
+    });
 
-    fetchMakeDetails();
+    vehicleMakeStore.getMakeDetailsById(id as string).then(setMakeDetails);
+
+    return () => unsubscribe();
   }, [id, vehicleMakeStore]);
 
   return (
@@ -49,7 +52,7 @@ const EditVehicleMake = () => {
             <h1>Make abbreviation</h1>
             <div className="flex w-full gap-2">
               <Input aria-label="vehicleMakeAbrv" readOnly value={makeDetails?.abrv} className="w-full shadow-none" />
-              <Button>Edit</Button>
+              <EditVehicleAbrv makeId={makeDetails?.id as string} />
             </div>
           </div>
         </div>
