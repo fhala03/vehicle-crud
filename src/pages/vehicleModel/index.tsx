@@ -4,6 +4,7 @@ import { useRootStore } from "@/stores/rootStore";
 import VehicleModelCard from "@/components/vehicleModel/vehicleModelCard";
 import AddVehicleModel from "@/components/vehicleModel/addVehicleModel";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 const VehicleModelsPage = observer(() => {
   const { vehicleModelStore, vehicleMakeStore } = useRootStore();
@@ -17,8 +18,10 @@ const VehicleModelsPage = observer(() => {
   const handleSortChange = () => {
     if (isSortingAZ) {
       vehicleModelStore.fetchModelsSortedZA();
+      toast.info("Sorted from Z to A");
     } else {
       vehicleModelStore.fetchModelsSortedAZ();
+      toast.info("Sorted from Z to A");
     }
     setIsSortingAZ(!isSortingAZ);
   };

@@ -5,6 +5,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Button } from "../ui/button";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
+import { toast } from "sonner";
 
 const AddVehicleModel = observer(() => {
   const [open, setOpen] = useState(false);
@@ -45,7 +46,7 @@ const AddVehicleModel = observer(() => {
       abrv: "",
       makeId: "",
     });
-
+    toast.success("Model has been created");
     setOpen(false);
 
     await vehicleModelStore.fetchModels();

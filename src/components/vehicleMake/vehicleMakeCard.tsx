@@ -4,6 +4,7 @@ import { Button } from "../ui/button";
 import { Edit, X } from "lucide-react";
 import { useRootStore } from "@/stores/rootStore";
 import { Link } from "react-router-dom";
+import { toast } from "sonner";
 
 interface VehicleMakeCardProps {
   make: VehicleMakeType;
@@ -15,6 +16,7 @@ const VehicleMakeCard = ({ make }: VehicleMakeCardProps) => {
   const handleDelete = async () => {
     if (make.id) {
       await vehicleMakeStore.deleteMake(make.id);
+      toast.info("Vehicle has been deleted");
     }
   };
 

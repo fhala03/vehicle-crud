@@ -4,6 +4,7 @@ import { useRootStore } from "@/stores/rootStore";
 import VehicleMakeCard from "@/components/vehicleMake/vehicleMakeCard";
 import AddVehicleMake from "@/components/vehicleMake/addVehicleMake";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 const VehicleMakePage = observer(() => {
   const { vehicleMakeStore } = useRootStore();
@@ -16,8 +17,10 @@ const VehicleMakePage = observer(() => {
   const handleSortChange = () => {
     if (isSortingAZ) {
       vehicleMakeStore.fetchMakesSortedZA();
+      toast.info("Sorted from Z to A");
     } else {
       vehicleMakeStore.fetchMakesSortedAZ();
+      toast.info("Sorted from A to Z");
     }
     setIsSortingAZ(!isSortingAZ);
   };

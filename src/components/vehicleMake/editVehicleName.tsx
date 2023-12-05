@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Label } from "@radix-ui/react-label";
 import { Input } from "../ui/input";
 import { useRootStore } from "@/stores/rootStore";
+import { toast } from "sonner";
 
 interface EditVehicleNameProps {
   makeId: string;
@@ -17,6 +18,7 @@ const EditVehicleName = ({ makeId }: EditVehicleNameProps) => {
   const handleConfirm = async () => {
     if (newName && makeId) {
       await vehicleMakeStore.updateMake(makeId, { name: newName });
+      toast.success("Vehicle name has been updated");
       setOpen(false);
     }
   };

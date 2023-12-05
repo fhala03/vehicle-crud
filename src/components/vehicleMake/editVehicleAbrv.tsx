@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Label } from "@radix-ui/react-label";
 import { Input } from "../ui/input";
 import { useRootStore } from "@/stores/rootStore";
+import { toast } from "sonner";
 
 interface EditVehicleAbrvProps {
   makeId: string;
@@ -17,6 +18,7 @@ const EditVehicleAbrv = ({ makeId }: EditVehicleAbrvProps) => {
   const handleConfirm = async () => {
     if (newAbrv && makeId) {
       await vehicleMakeStore.updateMake(makeId, { abrv: newAbrv });
+      toast.success("Vehicle abbreviation has been updated");
       setOpen(false);
     }
   };

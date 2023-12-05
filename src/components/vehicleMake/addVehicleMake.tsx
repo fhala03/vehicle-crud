@@ -5,6 +5,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Button } from "../ui/button";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
+import { toast } from "sonner";
 
 const AddVehicleMake = observer(() => {
   const [open, setOpen] = useState(false);
@@ -30,6 +31,7 @@ const AddVehicleMake = observer(() => {
       abrv: "",
     });
 
+    toast.success("Vehicle has been created");
     setOpen(false);
   };
 

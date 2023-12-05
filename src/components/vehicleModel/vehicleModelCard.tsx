@@ -6,6 +6,7 @@ import { Edit, X } from "lucide-react";
 import { useRootStore } from "@/stores/rootStore";
 import { VehicleModelType } from "@/utils/types";
 import { Link } from "react-router-dom";
+import { toast } from "sonner";
 
 interface VehicleModelCardProps {
   model: VehicleModelType;
@@ -29,6 +30,7 @@ const VehicleModelCard = observer(({ model }: VehicleModelCardProps) => {
   const handleDelete = async () => {
     if (model.id) {
       await vehicleModelStore.deleteModel(model.id);
+      toast.info("Model has been deleted");
     }
   };
 
