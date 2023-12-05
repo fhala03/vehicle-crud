@@ -1,9 +1,14 @@
 import { makeObservable, observable, action, runInAction } from "mobx";
 import { VehicleModelType } from "@/utils/types";
-
-import { onSnapshot, collection, query, orderBy, getDocs, getDoc, doc, where } from "firebase/firestore";
-import { createDoc, deleteDocById, updateDocById } from "@/services/network/base";
-import { db } from "@/services/firebase";
+import {
+  createDoc,
+  deleteDocById,
+  updateDocById,
+  getDocById,
+  onSnapshotListener,
+  getModelsByMake,
+  getModelsSorted,
+} from "@/services/network/base";
 
 export class VehicleModelStore {
   models: VehicleModelType[] = [];
@@ -15,6 +20,7 @@ export class VehicleModelStore {
       deleteModel: action,
       updateModel: action,
       fetchModels: action,
+      fetchModelsByMake: action,
       fetchModelsSortedAZ: action,
       fetchModelsSortedZA: action,
     });
@@ -47,81 +53,40 @@ export class VehicleModelStore {
   }
 
   async getModelById(id: string): Promise<VehicleModelType | null> {
-    try {
-      const modelDoc = await getDoc(doc(db, "vehicleModel", id));
-      return modelDoc.exists() ? { ...(modelDoc.data() as VehicleModelType), id: modelDoc.id } : null;
-    } catch (error) {
-      console.error("Error fetching model by id:", error);
-      return null;
-    }
+    return await getDocById<VehicleModelType>("vehicleModel", id);
   }
 
   async fetchModelsByMake(makeId: string) {
-    try {
-      const modelsCollection = collection(db, "vehicleModel");
-      const modelsQuery = query(modelsCollection, where("makeId", "==", makeId));
-      const modelsSnapshot = await getDocs(modelsQuery);
-
-      runInAction(() => {
-        this.models = modelsSnapshot.docs.map((doc) => ({
-          ...(doc.data() as VehicleModelType),
-          id: doc.id,
-        }));
-      });
-    } catch (error) {
-      console.error("Error fetching models by make:", error);
-    }
+    runInAction(async () => {
+      this.models = await getModelsByMake(makeId);
+    });
   }
 
   async fetchModelsSortedAZ() {
-    try {
-      const modelsCollection = collection(db, "vehicleModel");
-      const modelsQuery = query(modelsCollection, orderBy("name", "asc"));
-      const modelsSnapshot = await getDocs(modelsQuery);
-
-      runInAction(() => {
-        this.models = modelsSnapshot.docs.map((doc) => ({
-          ...(doc.data() as VehicleModelType),
-          id: doc.id,
-        }));
-      });
-    } catch (error) {
-      console.error("Error fetching models:", error);
-    }
+    runInAction(async () => {
+      this.models = await getModelsSorted("name", "asc");
+    });
   }
 
   async fetchModelsSortedZA() {
-    try {
-      const modelsCollection = collection(db, "vehicleModel");
-      const modelsQuery = query(modelsCollection, orderBy("name", "desc"));
-      const modelsSnapshot = await getDocs(modelsQuery);
-
-      runInAction(() => {
-        this.models = modelsSnapshot.docs.map((doc) => ({
-          ...(doc.data() as VehicleModelType),
-          id: doc.id,
-        }));
-      });
-    } catch (error) {
-      console.error("Error fetching models:", error);
-    }
+    runInAction(async () => {
+      this.models = await getModelsSorted("name", "desc");
+    });
   }
 
   async fetchModels() {
-    try {
-      const modelsCollection = collection(db, "vehicleModel");
-      const unsubscribe = onSnapshot(modelsCollection, (snapshot) => {
-        runInAction(() => {
-          this.models = snapshot.docs.map((doc) => ({
-            ...(doc.data() as VehicleModelType),
+    const unsubscribe = onSnapshotListener("vehicleModel", (snapshot) => {
+      runInAction(() => {
+        this.models = snapshot.docs.map((doc: { data: () => VehicleModelType; id: any }) => {
+          const data = doc.data() as VehicleModelType;
+          return {
+            ...data,
             id: doc.id,
-          }));
+          } as VehicleModelType;
         });
       });
+    });
 
-      return unsubscribe;
-    } catch (error) {
-      console.error("Error fetching models:", error);
-    }
+    return unsubscribe;
   }
 }

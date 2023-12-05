@@ -1,5 +1,18 @@
-import { addDoc, collection, deleteDoc, doc, updateDoc, onSnapshot, query, orderBy, getDocs, getDoc } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  updateDoc,
+  onSnapshot,
+  query,
+  orderBy,
+  getDocs,
+  getDoc,
+  where,
+} from "firebase/firestore";
 import { db } from "../firebase";
+import { VehicleModelType } from "@/utils/types";
 
 const getCollectionRef = (collectionName: string) => collection(db, collectionName);
 
@@ -38,4 +51,26 @@ export const getDocsSorted = async <T>(collectionName: string, field: string, or
 export const onSnapshotListener = (collectionName: string, callback: (snapshot: any) => void) => {
   const collectionRef = getCollectionRef(collectionName);
   return onSnapshot(collectionRef, callback);
+};
+
+export const getModelsByMake = async (makeId: string): Promise<VehicleModelType[]> => {
+  const modelsCollection = collection(db, "vehicleModel");
+  const modelsQuery = query(modelsCollection, where("makeId", "==", makeId));
+  const modelsSnapshot = await getDocs(modelsQuery);
+
+  return modelsSnapshot.docs.map((doc) => ({
+    ...(doc.data() as VehicleModelType),
+    id: doc.id,
+  }));
+};
+
+export const getModelsSorted = async (field: string, order: "asc" | "desc"): Promise<VehicleModelType[]> => {
+  const modelsCollection = collection(db, "vehicleModel");
+  const modelsQuery = query(modelsCollection, orderBy(field, order));
+  const modelsSnapshot = await getDocs(modelsQuery);
+
+  return modelsSnapshot.docs.map((doc) => ({
+    ...(doc.data() as VehicleModelType),
+    id: doc.id,
+  }));
 };
