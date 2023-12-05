@@ -3,6 +3,7 @@ import { Card, CardHeader } from "../ui/card";
 import { Button } from "../ui/button";
 import { Edit, X } from "lucide-react";
 import { useRootStore } from "@/stores/rootStore";
+import { Link } from "react-router-dom";
 
 interface VehicleMakeCardProps {
   make: VehicleMakeType;
@@ -36,9 +37,11 @@ const VehicleMakeCard = ({ make }: VehicleMakeCardProps) => {
         >
           <X className="h-4 w-4" />
         </Button>
-        <Button variant={"secondary"} size={"sm"} className="rounded-none rounded-tl-xl rounded-bl-xl  border-none shadow-none">
-          <Edit className="h-4 w-4" />
-        </Button>
+        <Link to={`/${make.id}/editMake`}>
+          <Button variant={"secondary"} size={"sm"} className="rounded-none rounded-tl-xl rounded-bl-xl  border-none shadow-none">
+            <Edit className="h-4 w-4" />
+          </Button>
+        </Link>
       </div>
 
       <div className="absolute h-full w-1/4 bg-gradient-to-r blur-3xl opacity-90 from-fuchsia-600 to-pink-600 right-0" />
