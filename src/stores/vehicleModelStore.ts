@@ -89,4 +89,18 @@ export class VehicleModelStore {
 
     return unsubscribe;
   }
+
+  async getModelDetailsById(id: string): Promise<Pick<VehicleModelType, "id" | "name" | "abrv"> | null> {
+    try {
+      const make = await this.getModelById(id);
+      if (make) {
+        const { id, name, abrv } = make;
+        return { id, name, abrv };
+      }
+      return null;
+    } catch (error) {
+      console.error("Error fetching model details by id:", error);
+      return null;
+    }
+  }
 }

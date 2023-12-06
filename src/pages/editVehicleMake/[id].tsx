@@ -1,5 +1,4 @@
 import { Input } from "@/components/ui/input";
-import { Separator } from "@/components/ui/separator";
 import EditVehicleAbrv from "@/components/vehicleMake/editVehicleAbrv";
 import EditVehicleName from "@/components/vehicleMake/editVehicleName";
 import { onSnapshotListener } from "@/services/network/base";
@@ -28,9 +27,9 @@ const EditVehicleMake = () => {
   return (
     <main>
       <section className="flex flex-col gap-4">
-        <div className="flex flex-col gap-2">
-          <span className="text-2xl font-bold dark:text-foreground">General</span>
-          <Separator className="opacity-40" />
+        <div className="flex flex-col gap-2 rounded-md p-6 relative overflow-hidden">
+          <span className="text-2xl font-bold">General</span>
+          <div className="absolute h-full w-1/4 -z-10 bg-gradient-to-r blur-3xl opacity-90 from-fuchsia-600 to-pink-600 left-0-0" />
         </div>
 
         <div className="flex flex-col gap-4">
