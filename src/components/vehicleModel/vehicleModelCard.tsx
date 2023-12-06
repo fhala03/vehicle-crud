@@ -38,7 +38,7 @@ const VehicleModelCard = observer(({ model }: VehicleModelCardProps) => {
     <Card className="shadow-none h-[150px] relative flex items-center justify-between overflow-hidden">
       <CardHeader>
         <div className="flex flex-col">
-          <span className="font-medium text-lg">{model.name}</span>
+          <span className="font-semibold text-lg">{model.name}</span>
           <span className="text-sm">{model.abrv}</span>
           {makeName && <span className="text-sm">{makeName}</span>}
         </div>

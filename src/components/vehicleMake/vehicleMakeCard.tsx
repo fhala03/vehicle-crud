@@ -24,7 +24,7 @@ const VehicleMakeCard = ({ make }: VehicleMakeCardProps) => {
     <Card className="shadow-none h-[150px] relative flex items-center justify-between overflow-hidden">
       <CardHeader>
         <div className="flex flex-col">
-          <span className="font-medium text-lg">{make.name}</span>
+          <span className="font-semibold text-lg">{make.name}</span>
           <span className="text-sm">{make.abrv}</span>
           <span className="text-sm">{make.id}</span>
         </div>
