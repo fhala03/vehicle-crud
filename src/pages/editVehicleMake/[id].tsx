@@ -36,13 +36,13 @@ const EditVehicleMake = () => {
           <div className="flex flex-col gap-2">
             <h1>Make ID</h1>
             <div className="flex w-full gap-2">
-              <Input aria-label="vehicleMakeId" value={makeDetails?.id} readOnly className="w-full shadow-none" />
+              <Input aria-label="vehicleMakeId" value={makeDetails?.id ?? ""} readOnly className="w-full shadow-none" />
             </div>
           </div>
           <div className="flex flex-col gap-2">
             <h1>Make name</h1>
             <div className="flex w-full gap-2">
-              <Input aria-label="vehicleMakeName" readOnly value={makeDetails?.name} className="w-full shadow-none" />
+              <Input aria-label="vehicleMakeName" readOnly value={makeDetails?.name ?? ""} className="w-full shadow-none" />
               <EditVehicleName makeId={makeDetails?.id as string} />
             </div>
           </div>
@@ -50,7 +50,7 @@ const EditVehicleMake = () => {
           <div className="flex flex-col gap-2">
             <h1>Make abbreviation</h1>
             <div className="flex w-full gap-2">
-              <Input aria-label="vehicleMakeAbrv" readOnly value={makeDetails?.abrv} className="w-full shadow-none" />
+              <Input aria-label="vehicleMakeAbrv" readOnly value={makeDetails?.abrv ?? ""} className="w-full shadow-none" />
               <EditVehicleAbrv makeId={makeDetails?.id as string} />
             </div>
           </div>
