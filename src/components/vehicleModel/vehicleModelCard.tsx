@@ -60,7 +60,7 @@ const VehicleModelCard = observer(({ model }: VehicleModelCardProps) => {
         </Link>
       </div>
 
-      <div className="absolute h-full w-1/4 bg-gradient-to-r blur-3xl opacity-90 from-fuchsia-600 to-pink-600 right-0" />
+      <div className="absolute h-full w-1/4 bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-amber-200 via-violet-600 to-sky-900 blur-3xl right-0" />
     </Card>
   );
 });
