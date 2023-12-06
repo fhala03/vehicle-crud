@@ -46,6 +46,7 @@ const VehicleModelCard = observer(({ model }: VehicleModelCardProps) => {
 
       <div className="flex z-10 flex-col items-center gap-2">
         <Button
+          aria-label="delete_model"
           variant={"secondary"}
           onClick={handleDelete}
           size={"sm"}
@@ -53,7 +54,7 @@ const VehicleModelCard = observer(({ model }: VehicleModelCardProps) => {
         >
           <X className="h-4 w-4" />
         </Button>
-        <Link to={`/${model.id}/editModel`}>
+        <Link aria-label="edit_model_link" to={`/${model.id}/editModel`}>
           <Button variant={"secondary"} size={"sm"} className="rounded-none rounded-tl-xl rounded-bl-xl  border-none shadow-none">
             <Edit className="h-4 w-4" />
           </Button>

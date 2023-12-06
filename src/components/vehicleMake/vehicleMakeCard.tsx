@@ -32,6 +32,7 @@ const VehicleMakeCard = ({ make }: VehicleMakeCardProps) => {
 
       <div className="flex z-10 flex-col items-center gap-2">
         <Button
+          aria-label="deleteMake"
           variant={"secondary"}
           onClick={handleDelete}
           size={"sm"}
@@ -39,7 +40,7 @@ const VehicleMakeCard = ({ make }: VehicleMakeCardProps) => {
         >
           <X className="h-4 w-4" />
         </Button>
-        <Link to={`/${make.id}/editMake`}>
+        <Link aria-label="edit_make_link" to={`/${make.id}/editMake`}>
           <Button variant={"secondary"} size={"sm"} className="rounded-none rounded-tl-xl rounded-bl-xl  border-none shadow-none">
             <Edit className="h-4 w-4" />
           </Button>
