@@ -29,11 +29,7 @@ export class VehicleModelStore {
   }
 
   async addModel(newModel: Omit<VehicleModelType, "id">) {
-    try {
-      await createDoc({ collectionName: "vehicleModel", doc: newModel });
-    } catch (error) {
-      console.error("Error adding model:", error);
-    }
+    await createDoc({ collectionName: "vehicleModel", doc: newModel });
   }
 
   async deleteModel(id: string) {
