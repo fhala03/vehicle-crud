@@ -5,14 +5,23 @@ import { createDoc, deleteDocById, getDocById, getDocsSorted, onSnapshotListener
 
 export class VehicleMakeStore {
   makes: VehicleMakeType[] = [];
+  currentPage: number = 1;
+  pageSize: number = 6;
+  totalMakes = 0;
+  isSortingAZ: boolean = true;
+  lastVisibleItemIndex: number | null = null;
 
   constructor() {
     makeObservable(this, {
       makes: observable,
+      currentPage: observable,
+      pageSize: observable,
       addMake: action,
       deleteMake: action,
       updateMake: action,
       fetchMakes: action,
+      fetchMakesWithPagination: action,
+      isSortingAZ: observable,
     });
 
     this.fetchMakes();
@@ -34,18 +43,6 @@ export class VehicleMakeStore {
     return await getDocById("vehicleMake", id);
   }
 
-  async fetchMakesSortedAZ() {
-    runInAction(async () => {
-      this.makes = await getDocsSorted<VehicleMakeType>("vehicleMake", "name", "asc");
-    });
-  }
-
-  async fetchMakesSortedZA() {
-    runInAction(async () => {
-      this.makes = await getDocsSorted<VehicleMakeType>("vehicleMake", "name", "desc");
-    });
-  }
-
   async fetchMakes() {
     const unsubscribe = onSnapshotListener("vehicleMake", (snapshot) => {
       runInAction(() => {
@@ -53,10 +50,39 @@ export class VehicleMakeStore {
           ...(doc.data() as VehicleMakeType),
           id: doc.id,
         }));
+
+        this.totalMakes = this.makes.length;
+        this.fetchMakesWithPagination(this.currentPage);
       });
     });
 
     return unsubscribe;
+  }
+
+  async fetchMakesSortedAZ() {
+    const allMakes = await getDocsSorted<VehicleMakeType>("vehicleMake", "name", "asc");
+    this.makes = allMakes.slice(0, this.pageSize);
+    this.totalMakes = allMakes.length;
+  }
+
+  async fetchMakesSortedZA() {
+    const allMakes = await getDocsSorted<VehicleMakeType>("vehicleMake", "name", "desc");
+    this.makes = allMakes.slice(0, this.pageSize);
+    this.totalMakes = allMakes.length;
+  }
+
+  async fetchMakesWithPagination(page: number) {
+    const start = (page - 1) * this.pageSize;
+    const end = start + this.pageSize;
+
+    const sortedMakes = this.isSortingAZ
+      ? await getDocsSorted<VehicleMakeType>("vehicleMake", "name", "asc")
+      : await getDocsSorted<VehicleMakeType>("vehicleMake", "name", "desc");
+
+    runInAction(() => {
+      this.makes = sortedMakes.slice(start, end);
+      this.lastVisibleItemIndex = end - 1;
+    });
   }
 
   async getMakeDetailsById(id: string): Promise<Pick<VehicleMakeType, "id" | "name" | "abrv"> | null> {
