@@ -37,19 +37,11 @@ export class VehicleModelStore {
   }
 
   async deleteModel(id: string) {
-    try {
-      await deleteDocById("vehicleModel", id);
-    } catch (error) {
-      console.error("Error deleting model:", error);
-    }
+    await deleteDocById("vehicleModel", id);
   }
 
   async updateModel(id: string, newFields: Record<string, any>) {
-    try {
-      await updateDocById("vehicleModel", id, newFields);
-    } catch (error) {
-      console.error("Error updating model:", error);
-    }
+    await updateDocById("vehicleModel", id, newFields);
   }
 
   async getModelById(id: string): Promise<VehicleModelType | null> {
@@ -91,16 +83,11 @@ export class VehicleModelStore {
   }
 
   async getModelDetailsById(id: string): Promise<Pick<VehicleModelType, "id" | "name" | "abrv"> | null> {
-    try {
-      const make = await this.getModelById(id);
-      if (make) {
-        const { id, name, abrv } = make;
-        return { id, name, abrv };
-      }
-      return null;
-    } catch (error) {
-      console.error("Error fetching model details by id:", error);
-      return null;
+    const make = await this.getModelById(id);
+    if (make) {
+      const { id, name, abrv } = make;
+      return { id, name, abrv };
     }
+    return null;
   }
 }

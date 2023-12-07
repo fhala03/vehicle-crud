@@ -19,27 +19,15 @@ export class VehicleMakeStore {
   }
 
   async addMake(newMake: Omit<VehicleMakeType, "id">) {
-    try {
-      await createDoc({ collectionName: "vehicleMake", doc: newMake });
-    } catch (error) {
-      console.error("Error adding make:", error);
-    }
+    await createDoc({ collectionName: "vehicleMake", doc: newMake });
   }
 
   async deleteMake(id: string) {
-    try {
-      await deleteDocById("vehicleMake", id);
-    } catch (error) {
-      console.error("Error deleting make:", error);
-    }
+    await deleteDocById("vehicleMake", id);
   }
 
   async updateMake(id: string, newFields: Record<string, any>) {
-    try {
-      await updateDocById("vehicleMake", id, newFields);
-    } catch (error) {
-      console.error("Error updating make:", error);
-    }
+    await updateDocById("vehicleMake", id, newFields);
   }
 
   async getMakeById(id: string): Promise<VehicleMakeType | null> {
@@ -72,16 +60,11 @@ export class VehicleMakeStore {
   }
 
   async getMakeDetailsById(id: string): Promise<Pick<VehicleMakeType, "id" | "name" | "abrv"> | null> {
-    try {
-      const make = await this.getMakeById(id);
-      if (make) {
-        const { id, name, abrv } = make;
-        return { id, name, abrv };
-      }
-      return null;
-    } catch (error) {
-      console.error("Error fetching make details by id:", error);
-      return null;
+    const make = await this.getMakeById(id);
+    if (make) {
+      const { id, name, abrv } = make;
+      return { id, name, abrv };
     }
+    return null;
   }
 }
