@@ -60,7 +60,7 @@ const VehicleMakePage = observer(() => {
           <VehicleMakeCard key={make.id} make={make} />
         ))}
       </div>
-      <div className="flex justify-between">
+      <div className="flex justify-between mb-4">
         <Button onClick={handlePrevPage} variant="secondary" disabled={vehicleMakeStore.currentPage === 1}>
           Previous Page
         </Button>
