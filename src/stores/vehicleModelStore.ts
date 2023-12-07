@@ -7,15 +7,22 @@ import {
   getDocById,
   onSnapshotListener,
   getModelsByMake,
-  getModelsSorted,
+  getDocsSorted,
 } from "@/services/network/base";
 
 export class VehicleModelStore {
   models: VehicleModelType[] = [];
+  currentPage: number = 1;
+  pageSize: number = 6;
+  totalModels = 0;
+  isSortingAZ: boolean = true;
+  lastVisibleItemIndex: number | null = null;
 
   constructor() {
     makeObservable(this, {
       models: observable,
+      currentPage: observable,
+      pageSize: observable,
       addModel: action,
       deleteModel: action,
       updateModel: action,
@@ -23,6 +30,8 @@ export class VehicleModelStore {
       fetchModelsByMake: action,
       fetchModelsSortedAZ: action,
       fetchModelsSortedZA: action,
+      fetchModelsWithPagination: action,
+      isSortingAZ: observable,
     });
 
     this.fetchModels();
@@ -33,7 +42,13 @@ export class VehicleModelStore {
   }
 
   async deleteModel(id: string) {
+    const currentPageBeforeDelete = this.currentPage;
     await deleteDocById("vehicleModel", id);
+    await this.fetchModelsWithPagination(currentPageBeforeDelete);
+    if (this.models.length === 0 && currentPageBeforeDelete > 1) {
+      this.currentPage = currentPageBeforeDelete - 1;
+      await this.fetchModelsWithPagination(this.currentPage);
+    }
   }
 
   async updateModel(id: string, newFields: Record<string, any>) {
@@ -51,15 +66,15 @@ export class VehicleModelStore {
   }
 
   async fetchModelsSortedAZ() {
-    runInAction(async () => {
-      this.models = await getModelsSorted("name", "asc");
-    });
+    const allMakes = await getDocsSorted<VehicleModelType>("vehicleModel", "name", "asc");
+    this.models = allMakes.slice(0, this.pageSize);
+    this.totalModels = allMakes.length;
   }
 
   async fetchModelsSortedZA() {
-    runInAction(async () => {
-      this.models = await getModelsSorted("name", "desc");
-    });
+    const allMakes = await getDocsSorted<VehicleModelType>("vehicleModel", "name", "desc");
+    this.models = allMakes.slice(0, this.pageSize);
+    this.totalModels = allMakes.length;
   }
 
   async fetchModels() {
@@ -72,10 +87,27 @@ export class VehicleModelStore {
             id: doc.id,
           } as VehicleModelType;
         });
+
+        this.totalModels = this.models.length;
+        this.fetchModelsWithPagination(this.currentPage);
       });
     });
 
     return unsubscribe;
+  }
+
+  async fetchModelsWithPagination(page: number) {
+    const start = (page - 1) * this.pageSize;
+    const end = start + this.pageSize;
+
+    const sortedMakes = this.isSortingAZ
+      ? await getDocsSorted<VehicleModelType>("vehicleModel", "name", "asc")
+      : await getDocsSorted<VehicleModelType>("vehicleModel", "name", "desc");
+
+    runInAction(() => {
+      this.models = sortedMakes.slice(start, end);
+      this.lastVisibleItemIndex = end - 1;
+    });
   }
 
   async getModelDetailsById(id: string): Promise<Pick<VehicleModelType, "id" | "name" | "abrv"> | null> {

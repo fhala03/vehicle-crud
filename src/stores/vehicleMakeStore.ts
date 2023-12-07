@@ -32,7 +32,13 @@ export class VehicleMakeStore {
   }
 
   async deleteMake(id: string) {
+    const currentPageBeforeDelete = this.currentPage;
     await deleteDocById("vehicleMake", id);
+    await this.fetchMakesWithPagination(currentPageBeforeDelete);
+    if (this.makes.length === 0 && currentPageBeforeDelete > 1) {
+      this.currentPage = currentPageBeforeDelete - 1;
+      await this.fetchMakesWithPagination(this.currentPage);
+    }
   }
 
   async updateMake(id: string, newFields: Record<string, any>) {
