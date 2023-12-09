@@ -14,10 +14,12 @@ const Navbar = () => {
 
         <div className="flex items-center gap-2">
           <Link to={"/vehicle-makes"}>
-            <Button variant={"secondary"}>Makes</Button>
+            <Button className="shadow-none" variant={"secondary"}>
+              Makes
+            </Button>
           </Link>
           <Link to={"/vehicle-models"}>
-            <Button>Models</Button>
+            <Button className="shadow-none">Models</Button>
           </Link>
         </div>
       </div>
