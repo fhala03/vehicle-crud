@@ -34,12 +34,6 @@ const EditVehicleMake = () => {
 
         <div className="flex flex-col gap-4">
           <div className="flex flex-col gap-2">
-            <h1>Make ID</h1>
-            <div className="flex w-full gap-2">
-              <Input aria-label="vehicleMakeId" value={makeDetails?.id ?? ""} readOnly className="w-full shadow-none" />
-            </div>
-          </div>
-          <div className="flex flex-col gap-2">
             <h1>Make name</h1>
             <div className="flex w-full gap-2">
               <Input aria-label="vehicleMakeName" readOnly value={makeDetails?.name ?? ""} className="w-full shadow-none" />
