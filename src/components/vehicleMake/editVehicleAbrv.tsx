@@ -12,7 +12,7 @@ interface EditVehicleAbrvProps {
 
 const EditVehicleAbrv = ({ makeId }: EditVehicleAbrvProps) => {
   const { vehicleMakeStore } = useRootStore();
-  const [newAbrv, setNewName] = useState("");
+  const [newAbrv, setNewAbrv] = useState("");
   const [open, setOpen] = useState(false);
 
   const handleConfirm = async () => {
@@ -45,7 +45,7 @@ const EditVehicleAbrv = ({ makeId }: EditVehicleAbrvProps) => {
               placeholder="Abbreviation"
               maxLength={30}
               value={newAbrv}
-              onChange={(e) => setNewName(e.target.value)}
+              onChange={(e) => setNewAbrv(e.target.value)}
             />
           </div>
           <Button type="button" onClick={handleConfirm}>
