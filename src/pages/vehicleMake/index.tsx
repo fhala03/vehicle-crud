@@ -20,10 +20,10 @@ const VehicleMakePage = observer(() => {
 
     if (vehicleMakeStore.isSortingAZ) {
       await vehicleMakeStore.fetchMakesSortedAZ();
-      toast.info("Sorted from Z to A");
+      toast.info("Sorted from A to Z");
     } else {
       await vehicleMakeStore.fetchMakesSortedZA();
-      toast.info("Sorted from A to Z");
+      toast.info("Sorted from Z to A");
     }
 
     if (previousLastVisibleItemIndex !== null) {

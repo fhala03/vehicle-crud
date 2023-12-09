@@ -15,24 +15,24 @@ const VehicleModelsPage = observer(() => {
   }, [vehicleModelStore, selectedMake]);
 
   const handleSortChange = async () => {
-    const previousLastVisibleItemIndex = vehicleMakeStore.lastVisibleItemIndex;
+    const previousLastVisibleItemIndex = vehicleModelStore.lastVisibleItemIndex;
 
-    vehicleMakeStore.isSortingAZ = !vehicleMakeStore.isSortingAZ;
+    vehicleModelStore.isSortingAZ = !vehicleModelStore.isSortingAZ;
 
-    if (vehicleMakeStore.isSortingAZ) {
-      await vehicleMakeStore.fetchMakesSortedAZ();
-      toast.info("Sorted from Z to A");
-    } else {
-      await vehicleMakeStore.fetchMakesSortedZA();
+    if (vehicleModelStore.isSortingAZ) {
+      await vehicleModelStore.fetchModelsSortedAZ();
       toast.info("Sorted from A to Z");
+    } else {
+      await vehicleModelStore.fetchModelsSortedZA();
+      toast.info("Sorted from Z to A");
     }
 
     if (previousLastVisibleItemIndex !== null) {
-      const newLastVisibleItemIndex = Math.min(previousLastVisibleItemIndex, vehicleMakeStore.totalMakes - 1);
-      const newPage = Math.ceil((newLastVisibleItemIndex + 1) / vehicleMakeStore.pageSize);
+      const newLastVisibleItemIndex = Math.min(previousLastVisibleItemIndex, vehicleModelStore.totalModels - 1);
+      const newPage = Math.ceil((newLastVisibleItemIndex + 1) / vehicleModelStore.pageSize);
 
-      vehicleMakeStore.currentPage = newPage;
-      await vehicleMakeStore.fetchMakesWithPagination(newPage);
+      vehicleModelStore.currentPage = newPage;
+      await vehicleModelStore.fetchModelsWithPagination(newPage);
     }
   };
 
