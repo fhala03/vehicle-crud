@@ -29,7 +29,7 @@ const EditVehicleMake = () => {
       <section className="flex flex-col gap-4">
         <div className="flex flex-col gap-2 rounded-md p-6 relative overflow-hidden">
           <span className="text-2xl font-bold">General</span>
-          <div className="absolute h-full w-1/4 -z-10 bg-gradient-to-r blur-3xl opacity-90 from-fuchsia-600 to-pink-600 left-0-0" />
+          <div className="absolute h-full w-1/4 -z-10 bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 blur-3xl opacity-90 left-0-0" />
         </div>
 
         <div className="flex flex-col gap-4">

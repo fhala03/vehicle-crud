@@ -1,29 +1,31 @@
 import { Button } from "@/components/ui/button";
-import { GitHubLogoIcon, LinkedInLogoIcon } from "@radix-ui/react-icons";
 import { Link } from "react-router-dom";
 
 const LandingPage = () => {
   return (
-    <div className="mt-32 flex items-center justify-center text-center md:mt-32">
-      <div className="z-10 flex flex-col items-center justify-center gap-6">
-        <h1 className="font-inter relative max-w-2xl text-5xl font-extrabold leading-[0.9] tracking-[-2.5px] sm:text-6xl md:text-7xl">
-          Where dreams meet <span>the road</span>
-        </h1>
-        <p className="max-w-xl text-muted-foreground">
-          Whether you're overseeing a diverse fleet or managing specific vehicle details, VehicleCRUD adapts to your unique needs.
-        </p>
-
-        <div className="flex gap-4 items-center">
-          <Link target="_blank" aria-label="linkedin" rel="noreferrer" to={"https://www.linkedin.com/in/filip-halapir/"}>
-            <Button size={"lg"} className="bg-gradient-to-r from-purple-200 via-purple-400 to-purple-800 rounded-full">
-              <LinkedInLogoIcon className="h-5 w-5" />
-            </Button>
-          </Link>
-          <Link target="_blank" aria-label="github" rel="noreferrer" to={"https://github.com/fhala03"}>
-            <Button size={"lg"} className="bg-gradient-to-r from-purple-200 via-purple-400 to-purple-800 rounded-full">
-              <GitHubLogoIcon className="w-5 h-5" />
-            </Button>
-          </Link>
+    <div className="md:py-20 py-12">
+      <div className="flex lg:flex-row flex-col lg:items-center">
+        <div className="w-full max-w-xl mx-auto lg:order-1 lg:w-1/2">
+          <h1 className="text-4xl font-bold md:text-6xl xl:text-7xl">Where dreams meet the road</h1>
+          <p className="mt-6 text-muted-foreground">
+            Whether you're overseeing a diverse fleet or managing specific vehicle details, VehicleCRUD adapts to your unique
+            needs.
+          </p>
+          <div className="mt-6 flex items-center gap-2">
+            <Link target="_blank" aria-label="linkedin" rel="noreferrer" to={"https://www.linkedin.com/in/filip-halapir/"}>
+              <Button>LinkedIn</Button>
+            </Link>
+            <Link target="_blank" aria-label="github" rel="noreferrer" to={"https://github.com/fhala03"}>
+              <Button variant={"secondary"}>Github</Button>
+            </Link>
+          </div>
+        </div>
+        <div className="w-full h-64 lg:mt-0 mt-10 lg:order-2 lg:w-1/2 lg:h-auto">
+          <img
+            className="h-auto w-full rounded-md object-cover max-w-lg mx-auto"
+            src="https://cdn.devdojo.com/images/november2023/abstract-shapes.jpeg"
+            alt="Illustration"
+          ></img>
         </div>
       </div>
     </div>

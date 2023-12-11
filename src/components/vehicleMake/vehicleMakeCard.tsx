@@ -47,7 +47,7 @@ const VehicleMakeCard = ({ make }: VehicleMakeCardProps) => {
         </Link>
       </div>
 
-      <div className="absolute h-full w-1/4 bg-gradient-to-r blur-3xl opacity-90 from-fuchsia-600 to-pink-600 right-0" />
+      <div className="absolute h-full w-1/4 bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 blur-3xl opacity-90 right-0" />
     </Card>
   );
 };
