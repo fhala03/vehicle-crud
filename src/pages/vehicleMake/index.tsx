@@ -60,18 +60,21 @@ const VehicleMakePage = observer(() => {
           <VehicleMakeCard key={make.id} make={make} />
         ))}
       </div>
-      <div className="flex justify-between mb-4">
-        <Button onClick={handlePrevPage} variant="secondary" disabled={vehicleMakeStore.currentPage === 1}>
-          Previous Page
-        </Button>
-        <Button
-          onClick={handleNextPage}
-          variant="secondary"
-          disabled={vehicleMakeStore.currentPage === Math.ceil(vehicleMakeStore.totalMakes / vehicleMakeStore.pageSize)}
-        >
-          Next Page
-        </Button>
-      </div>
+
+      {vehicleMakeStore.totalMakes > 0 && (
+        <div className="flex justify-between mb-4">
+          <Button onClick={handlePrevPage} variant="secondary" disabled={vehicleMakeStore.currentPage === 1}>
+            Previous Page
+          </Button>
+          <Button
+            onClick={handleNextPage}
+            variant="secondary"
+            disabled={vehicleMakeStore.currentPage === Math.ceil(vehicleMakeStore.totalMakes / vehicleMakeStore.pageSize)}
+          >
+            Next Page
+          </Button>
+        </div>
+      )}
     </div>
   );
 });

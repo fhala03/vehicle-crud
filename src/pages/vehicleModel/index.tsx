@@ -78,18 +78,20 @@ const VehicleModelsPage = observer(() => {
           ))}
       </div>
 
-      <div className="flex justify-between mb-4">
-        <Button onClick={handlePrevPage} variant="secondary" disabled={vehicleModelStore.currentPage === 1}>
-          Previous Page
-        </Button>
-        <Button
-          onClick={handleNextPage}
-          variant="secondary"
-          disabled={vehicleModelStore.currentPage === Math.ceil(vehicleModelStore.totalModels / vehicleModelStore.pageSize)}
-        >
-          Next Page
-        </Button>
-      </div>
+      {vehicleModelStore.totalModels > 0 && (
+        <div className="flex justify-between mb-4">
+          <Button onClick={handlePrevPage} variant="secondary" disabled={vehicleModelStore.currentPage === 1}>
+            Previous Page
+          </Button>
+          <Button
+            onClick={handleNextPage}
+            variant="secondary"
+            disabled={vehicleModelStore.currentPage === Math.ceil(vehicleModelStore.totalModels / vehicleModelStore.pageSize)}
+          >
+            Next Page
+          </Button>
+        </div>
+      )}
     </div>
   );
 });
