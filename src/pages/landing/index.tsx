@@ -23,7 +23,7 @@ const LandingPage = () => {
         <div className="w-full h-64 lg:mt-0 mt-10 lg:order-2 lg:w-1/2 lg:h-auto">
           <img
             className="h-auto w-full rounded-md object-cover max-w-lg mx-auto"
-            src="/src/assets/car.svg"
+            src="/car.svg"
             alt="Illustration"
           ></img>
         </div>
