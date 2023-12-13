@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 const LandingPage = () => {
   return (
-    <div className="md:py-20 py-12">
+    <div className="md:py-32 py-12">
       <div className="flex lg:flex-row flex-col lg:items-center">
         <div className="w-full max-w-xl mx-auto lg:order-1 lg:w-1/2">
           <h1 className="text-4xl font-bold md:text-6xl xl:text-7xl">Where dreams meet the road</h1>
@@ -23,7 +23,7 @@ const LandingPage = () => {
         <div className="w-full h-64 lg:mt-0 mt-10 lg:order-2 lg:w-1/2 lg:h-auto">
           <img
             className="h-auto w-full rounded-md object-cover max-w-lg mx-auto"
-            src="https://cdn.devdojo.com/images/november2023/abstract-shapes.jpeg"
+            src="/src/assets/car.svg"
             alt="Illustration"
           ></img>
         </div>
