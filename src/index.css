@@ -76,5 +76,5 @@
 }
 
 .maincol {
-  @apply mx-auto max-w-screen-lg px-6 lg:px-0;
+  @apply mx-auto max-w-screen-lg px-6 xl:px-0;
 }
