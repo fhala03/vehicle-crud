@@ -5,6 +5,7 @@ import { Label } from "@radix-ui/react-label";
 import { Input } from "../ui/input";
 import { useRootStore } from "@/stores/rootStore";
 import { toast } from "sonner";
+import { abrvSchema } from "@/utils/schema";
 
 interface EditVehicleAbrvProps {
   makeId: string;
@@ -16,10 +17,14 @@ const EditVehicleAbrv = ({ makeId }: EditVehicleAbrvProps) => {
   const [open, setOpen] = useState(false);
 
   const handleConfirm = async () => {
-    if (newAbrv && makeId) {
+    try {
+      abrvSchema.parse(newAbrv);
+
       await vehicleMakeStore.updateMake(makeId, { abrv: newAbrv });
       toast.success("Vehicle abbreviation has been updated");
       setOpen(false);
+    } catch (error) {
+      toast.error("There has been an error while updating vehicle make");
     }
   };
 
@@ -43,7 +48,6 @@ const EditVehicleAbrv = ({ makeId }: EditVehicleAbrvProps) => {
               className="border-none focus-visible:ring-0"
               type="text"
               placeholder="Abbreviation"
-              maxLength={30}
               value={newAbrv}
               onChange={(e) => setNewAbrv(e.target.value)}
             />

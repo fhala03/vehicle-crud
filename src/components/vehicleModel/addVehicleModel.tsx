@@ -6,6 +6,7 @@ import { Button } from "../ui/button";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { toast } from "sonner";
+import { abrvSchema, nameSchema } from "@/utils/schema";
 
 const AddVehicleModel = observer(() => {
   const [open, setOpen] = useState(false);
@@ -33,23 +34,35 @@ const AddVehicleModel = observer(() => {
   };
 
   const handleAddModel = async () => {
-    const modelToAdd = {
-      name: newModel.name,
-      abrv: newModel.abrv,
-      makeId: newModel.makeId,
-    };
+    try {
+      nameSchema.parse(newModel.name);
+      abrvSchema.parse(newModel.abrv);
 
-    await vehicleModelStore.addModel(modelToAdd);
+      if (!newModel.makeId.trim()) {
+        throw new Error("Make ID cannot be empty");
+      }
 
-    setNewModel({
-      name: "",
-      abrv: "",
-      makeId: "",
-    });
-    toast.success("Model has been created");
-    setOpen(false);
+      const modelToAdd = {
+        name: newModel.name,
+        abrv: newModel.abrv,
+        makeId: newModel.makeId,
+      };
 
-    await vehicleModelStore.fetchModels();
+      await vehicleModelStore.addModel(modelToAdd);
+
+      setNewModel({
+        name: "",
+        abrv: "",
+        makeId: "",
+      });
+
+      toast.success("Model has been created");
+      setOpen(false);
+
+      await vehicleModelStore.fetchModels();
+    } catch (error) {
+      toast.error("There has been an error while creating a vehicle model");
+    }
   };
 
   return (

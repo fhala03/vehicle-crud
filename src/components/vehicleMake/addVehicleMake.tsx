@@ -6,6 +6,7 @@ import { Button } from "../ui/button";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { toast } from "sonner";
+import { abrvSchema, nameSchema } from "@/utils/schema";
 
 const AddVehicleMake = observer(() => {
   const [open, setOpen] = useState(false);
@@ -24,15 +25,22 @@ const AddVehicleMake = observer(() => {
   };
 
   const handleAddMake = async () => {
-    await vehicleMakeStore.addMake(newMake);
+    try {
+      nameSchema.parse(newMake.name);
+      abrvSchema.parse(newMake.abrv);
 
-    setNewMake({
-      name: "",
-      abrv: "",
-    });
+      await vehicleMakeStore.addMake(newMake);
 
-    toast.success("Vehicle has been created");
-    setOpen(false);
+      setNewMake({
+        name: "",
+        abrv: "",
+      });
+
+      toast.success("Vehicle has been created");
+      setOpen(false);
+    } catch (error) {
+      toast.error("There has been an error creating vehicle make");
+    }
   };
 
   return (

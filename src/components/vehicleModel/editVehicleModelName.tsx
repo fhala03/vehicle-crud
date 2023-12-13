@@ -5,6 +5,7 @@ import { Label } from "@radix-ui/react-label";
 import { Input } from "../ui/input";
 import { useRootStore } from "@/stores/rootStore";
 import { toast } from "sonner";
+import { nameSchema } from "@/utils/schema";
 
 interface EditVehicleModelNameProps {
   modelId: string;
@@ -16,10 +17,14 @@ const EditVehicleModelName = ({ modelId }: EditVehicleModelNameProps) => {
   const [open, setOpen] = useState(false);
 
   const handleConfirm = async () => {
-    if (newName && modelId) {
+    try {
+      nameSchema.parse(newName);
+
       await vehicleModelStore.updateModel(modelId, { name: newName });
       toast.success("Vehicle name has been updated");
       setOpen(false);
+    } catch (error) {
+      toast.error("There has been an error while updating vehicle model");
     }
   };
 

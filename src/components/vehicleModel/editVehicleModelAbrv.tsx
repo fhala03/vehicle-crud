@@ -5,6 +5,7 @@ import { Label } from "@radix-ui/react-label";
 import { Input } from "../ui/input";
 import { useRootStore } from "@/stores/rootStore";
 import { toast } from "sonner";
+import { abrvSchema } from "@/utils/schema";
 
 interface EditVehicleModelNameProps {
   modelId: string;
@@ -16,10 +17,14 @@ const EditVehicleModelAbrv = ({ modelId }: EditVehicleModelNameProps) => {
   const [open, setOpen] = useState(false);
 
   const handleConfirm = async () => {
-    if (newAbrv && modelId) {
+    try {
+      abrvSchema.parse(newAbrv);
+
       await vehicleModelStore.updateModel(modelId, { abrv: newAbrv });
-      toast.success("Vehicle abrv has been updated");
+      toast.success("Vehicle abbreviation has been updated");
       setOpen(false);
+    } catch (error) {
+      toast.error("There has been an error while updating vehicle model");
     }
   };
 
@@ -57,4 +62,4 @@ const EditVehicleModelAbrv = ({ modelId }: EditVehicleModelNameProps) => {
   );
 };
 
-export default EditVehicleModelAbrv
+export default EditVehicleModelAbrv;

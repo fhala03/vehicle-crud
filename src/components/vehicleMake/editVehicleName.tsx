@@ -5,6 +5,7 @@ import { Label } from "@radix-ui/react-label";
 import { Input } from "../ui/input";
 import { useRootStore } from "@/stores/rootStore";
 import { toast } from "sonner";
+import { nameSchema } from "@/utils/schema";
 
 interface EditVehicleNameProps {
   makeId: string;
@@ -16,10 +17,14 @@ const EditVehicleName = ({ makeId }: EditVehicleNameProps) => {
   const [open, setOpen] = useState(false);
 
   const handleConfirm = async () => {
-    if (newName && makeId) {
+    try {
+      nameSchema.parse(newName);
+
       await vehicleMakeStore.updateMake(makeId, { name: newName });
       toast.success("Vehicle name has been updated");
       setOpen(false);
+    } catch (error) {
+      toast.error("There has been an error while updating vehicle make");
     }
   };
 
@@ -43,7 +48,6 @@ const EditVehicleName = ({ makeId }: EditVehicleNameProps) => {
               className="border-none focus-visible:ring-0"
               type="text"
               placeholder="Name"
-              maxLength={30}
               value={newName}
               onChange={(e) => setNewName(e.target.value)}
             />
