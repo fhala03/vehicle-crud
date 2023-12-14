@@ -11,8 +11,8 @@ function App() {
     <Routes>
       <Route element={<SharedLayout />}>
         <Route path="/" element={<LandingPage />} />
-        <Route path="/vehicle-makes" element={<VehicleMakesPage />} />
-        <Route path="/vehicle-models" element={<VehicleModelsPage />} />
+        <Route path="/makes" element={<VehicleMakesPage />} />
+        <Route path="/models" element={<VehicleModelsPage />} />
         <Route path="/:id/editMake" element={<EditVehicleMake />} />
         <Route path="/:id/editModel" element={<EditVehicleModel />} />
         <Route path="*" element={<LandingPage />} />
