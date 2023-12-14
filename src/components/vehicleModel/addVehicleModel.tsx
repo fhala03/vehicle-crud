@@ -91,8 +91,6 @@ const AddVehicleModel = observer(() => {
                   name="name"
                   placeholder="Name"
                   value={newModel.name}
-                  minLength={3}
-                  maxLength={30}
                   onChange={handleInputChange}
                   className="border shadow-none focus-visible:ring-0"
                 />
@@ -103,8 +101,6 @@ const AddVehicleModel = observer(() => {
                   type="text"
                   name="abrv"
                   placeholder="Abrv"
-                  minLength={3}
-                  maxLength={30}
                   value={newModel.abrv}
                   onChange={handleInputChange}
                   className="border shadow-none focus-visible:ring-0"

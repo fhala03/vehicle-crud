@@ -69,8 +69,6 @@ const AddVehicleMake = observer(() => {
                   name="name"
                   placeholder="Name"
                   value={newMake.name}
-                  minLength={3}
-                  maxLength={30}
                   onChange={handleInputChange}
                   className="border shadow-none focus-visible:ring-0"
                 />
@@ -81,8 +79,6 @@ const AddVehicleMake = observer(() => {
                   type="text"
                   name="abrv"
                   placeholder="Abrv"
-                  minLength={3}
-                  maxLength={30}
                   value={newMake.abrv}
                   onChange={handleInputChange}
                   className="border shadow-none focus-visible:ring-0"
