@@ -2,18 +2,18 @@ import { useState, useEffect } from "react";
 import { observer } from "mobx-react";
 import { Card, CardHeader } from "../ui/card";
 import { Button } from "../ui/button";
-import { Edit, X } from "lucide-react";
+import { Edit } from "lucide-react";
 import { useRootStore } from "@/stores/rootStore";
 import { VehicleModelType } from "@/utils/types";
 import { Link } from "react-router-dom";
-import { toast } from "sonner";
+import DeleteVehicleModel from "./deleteVehicleModel";
 
 interface VehicleModelCardProps {
   model: VehicleModelType;
 }
 
 const VehicleModelCard = observer(({ model }: VehicleModelCardProps) => {
-  const { vehicleModelStore, vehicleMakeStore } = useRootStore();
+  const { vehicleMakeStore } = useRootStore();
   const [makeName, setMakeName] = useState<string | null>(null);
 
   useEffect(() => {
@@ -27,13 +27,6 @@ const VehicleModelCard = observer(({ model }: VehicleModelCardProps) => {
     fetchMakeName();
   }, [model.makeId, vehicleMakeStore]);
 
-  const handleDelete = async () => {
-    if (model.id) {
-      await vehicleModelStore.deleteModel(model.id);
-      toast.info("Model has been deleted");
-    }
-  };
-
   return (
     <Card className="shadow-none h-[150px] relative flex items-center justify-between overflow-hidden">
       <CardHeader>
@@ -45,15 +38,7 @@ const VehicleModelCard = observer(({ model }: VehicleModelCardProps) => {
       </CardHeader>
 
       <div className="flex z-10 flex-col items-center gap-2">
-        <Button
-          aria-label="delete_model"
-          variant={"secondary"}
-          onClick={handleDelete}
-          size={"sm"}
-          className="rounded-none rounded-tl-xl rounded-bl-xl border-none shadow-none"
-        >
-          <X className="h-4 w-4" />
-        </Button>
+        <DeleteVehicleModel modelId={model.id} />
         <Link aria-label="edit_model_link" to={`/${model.id}/editModel`}>
           <Button variant={"secondary"} size={"sm"} className="rounded-none rounded-tl-xl rounded-bl-xl  border-none shadow-none">
             <Edit className="h-4 w-4" />

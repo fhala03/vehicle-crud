@@ -1,25 +1,15 @@
 import { VehicleMakeType } from "@/utils/types";
 import { Card, CardHeader } from "../ui/card";
 import { Button } from "../ui/button";
-import { Edit, X } from "lucide-react";
-import { useRootStore } from "@/stores/rootStore";
+import { Edit } from "lucide-react";
 import { Link } from "react-router-dom";
-import { toast } from "sonner";
+import DeleteVehicleMake from "./deleteVehicleMake";
 
 interface VehicleMakeCardProps {
   make: VehicleMakeType;
 }
 
 const VehicleMakeCard = ({ make }: VehicleMakeCardProps) => {
-  const { vehicleMakeStore } = useRootStore();
-
-  const handleDelete = async () => {
-    if (make.id) {
-      await vehicleMakeStore.deleteMake(make.id);
-      toast.info("Vehicle has been deleted");
-    }
-  };
-
   return (
     <Card className="shadow-none h-[150px] relative flex items-center justify-between overflow-hidden">
       <CardHeader>
@@ -31,15 +21,7 @@ const VehicleMakeCard = ({ make }: VehicleMakeCardProps) => {
       </CardHeader>
 
       <div className="flex z-10 flex-col items-center gap-2">
-        <Button
-          aria-label="deleteMake"
-          variant={"secondary"}
-          onClick={handleDelete}
-          size={"sm"}
-          className="rounded-none rounded-tl-xl rounded-bl-xl border-none shadow-none"
-        >
-          <X className="h-4 w-4" />
-        </Button>
+        <DeleteVehicleMake makeId={make.id} />
         <Link aria-label="edit_make_link" to={`/${make.id}/editMake`}>
           <Button variant={"secondary"} size={"sm"} className="rounded-none rounded-tl-xl rounded-bl-xl  border-none shadow-none">
             <Edit className="h-4 w-4" />
