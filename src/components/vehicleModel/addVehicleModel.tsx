@@ -112,7 +112,11 @@ const AddVehicleModel = observer(() => {
               </div>
               <div>
                 <Label className="flex mb-1 justify-end text-xs font-normal text-foreground/40">Select Make</Label>
-                <select value={newModel.makeId} onChange={handleSelectChange} className="border shadow-none focus-visible:ring-0">
+                <select
+                  value={newModel.makeId}
+                  onChange={handleSelectChange}
+                  className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm text-muted-foreground"
+                >
                   <option value="" disabled>
                     Select Make
                   </option>

@@ -55,11 +55,15 @@ const VehicleModelsPage = observer(() => {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col md:flex-row md:items-center gap-2 justify-between">
-        <div className="flex md:gap-4 items-center justify-between">
+        <div className="flex gap-4 items-center justify-between">
           <Button variant={"secondary"} onClick={handleSortChange}>
             Sort from {vehicleModelStore.isSortingAZ ? "Z-A" : "A-Z"}
           </Button>
-          <select onChange={(e) => handleMakeChange(e.target.value)} value={selectedMake || ""}>
+          <select
+            className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm text-muted-foreground"
+            onChange={(e) => handleMakeChange(e.target.value)}
+            value={selectedMake || ""}
+          >
             <option value="">All Makes</option>
             {vehicleMakeStore.makes.map((make) => (
               <option key={make.id} value={make.id}>
