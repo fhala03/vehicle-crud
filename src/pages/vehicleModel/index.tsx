@@ -82,7 +82,7 @@ const VehicleModelsPage = observer(() => {
           ))}
       </div>
 
-      {vehicleModelStore.totalModels > 0 && (
+      {vehicleModelStore.totalModels > 0 && !selectedMake && (
         <div className="flex justify-between mb-4">
           <Button onClick={handlePrevPage} variant="secondary" disabled={vehicleModelStore.currentPage === 1}>
             Previous Page
