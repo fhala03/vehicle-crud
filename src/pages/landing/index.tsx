@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { GitHubLogoIcon, LinkedInLogoIcon } from "@radix-ui/react-icons";
 import { Link } from "react-router-dom";
 
 const LandingPage = () => {
@@ -13,10 +14,16 @@ const LandingPage = () => {
           </p>
           <div className="mt-6 flex items-center gap-2">
             <Link target="_blank" aria-label="linkedin" rel="noreferrer" to={"https://www.linkedin.com/in/filip-halapir/"}>
-              <Button className="px-10">LinkedIn</Button>
+              <Button className="bg-sky-500/10 text-sky-500 shadow-none flex items-center gap-2 hover:bg-sky-500/20 px-10">
+                <LinkedInLogoIcon className="h-4 w-4" />
+                LinkedIn
+              </Button>
             </Link>
             <Link target="_blank" aria-label="github" rel="noreferrer" to={"https://github.com/fhala03"}>
-              <Button className="bg-[#ff846c] text-background hover:bg-[#f77d65] px-10">Github</Button>
+              <Button className="bg-[#ff846c]/10 text-[#ff846c] shadow-none flex items-center gap-2 hover:bg-[#f77d65]/20 px-10">
+                <GitHubLogoIcon className="w-4 h-4" />
+                Github
+              </Button>
             </Link>
           </div>
         </div>

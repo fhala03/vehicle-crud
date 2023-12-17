@@ -21,7 +21,7 @@ const Navbar = () => {
               to={route.href}
               className={cn(
                 "flex w-full cursor-pointer text-sm font-medium rounded-md px-4 py-2 transition-all",
-                location.pathname === route.href && "bg-secondary"
+                location.pathname === route.href && "underline-offset-4 underline"
               )}
             >
               <div className="flex flex-1 items-center">{route.label}</div>
