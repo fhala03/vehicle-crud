@@ -18,7 +18,12 @@ const AddVehicleMake = observer(() => {
           <DialogTitle>Add new make</DialogTitle>
           <DialogDescription>A new make will be added to your collection. Click confirm when you are done.</DialogDescription>
         </DialogHeader>
-        <MakeForm form={makeForm} />
+        <MakeForm
+          form={makeForm}
+          onFinish={() => {
+            setOpen(false);
+          }}
+        />
       </DialogContent>
     </Dialog>
   );

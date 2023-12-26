@@ -4,26 +4,36 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
-export const MakeForm = observer(({ form }: { form: typeof makeForm }) => {
+export const MakeForm = observer(({ form, onFinish }: { form: typeof makeForm; onFinish: () => void }) => {
   return (
-    <form>
-      <div className="grid gap-4">
-        <div>
-          <Label htmlFor={form.$("name").id}>{form.$("name").Label}</Label>
-          <Input {...form.$("name").bind()} />
-          <div className="text-sm ml-2 text-red-500">{form.$("name").error}</div>
+    <form onSubmit={(e) => e.preventDefault()}>
+      <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-2">
+          <Label className="font-normal" htmlFor={form.$("name").id}>
+            {form.$("name").label}
+          </Label>
+          <Input className="shadow-none" {...form.$("name").bind()} />
+          <div className="text-red-700 text-sm">{form.$("name").error}</div>
         </div>
-        <div>
-          <Label htmlFor={form.$("abrv").id}>{form.$("abrv").Label}</Label>
-          <Input {...form.$("abrv").bind()} />
-          <div className="ml-2 text-sm text-red-500">{form.$("abrv").error}</div>
+        <div className="flex flex-col gap-2">
+          <Label className="font-normal" htmlFor={form.$("abrv").id}>
+            {form.$("abrv").label}
+          </Label>
+          <Input className="shadow-none" {...form.$("abrv").bind()} />
+          <div className="text-red-700 text-sm">{form.$("abrv").error}</div>
         </div>
-        <Button type="submit" onClick={form.onSubmit}>
+
+        <Button
+          type="submit"
+          onClick={() => {
+            form.submit();
+            onFinish();
+          }}
+        >
           Submit
         </Button>
       </div>
-      {/* <Button onClick={form.onClear}>Clear</Button>
-      <Button onClick={form.onReset}>Reset</Button> */}
+
       <p>{form.error}</p>
     </form>
   );

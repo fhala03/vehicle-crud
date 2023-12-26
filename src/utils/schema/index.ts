@@ -17,7 +17,7 @@ export const makeForm = new Form(
       },
       {
         name: "abrv",
-        label: "abrv",
+        label: "Abrv",
         placeholder: "Enter abrv",
       },
     ],
