@@ -1,7 +1,6 @@
 import { makeObservable, observable, action, runInAction } from "mobx";
-import { VehicleMakeType } from "@/utils/types";
 
-import { getDocsSorted, onSnapshotListener } from "@/services/network/base";
+import { VehicleMakeType } from "@/utils/types";
 import { VehicleMakeService } from "@/services/network/vehicleMake";
 
 export class VehicleMakeStore {
@@ -52,7 +51,7 @@ export class VehicleMakeStore {
   }
 
   async fetchMakes() {
-    const unsubscribe = onSnapshotListener("vehicleMake", (snapshot) => {
+    const unsubscribe = this.vehicleMakeService.subscribeToMakes((snapshot) => {
       runInAction(() => {
         this.makes = snapshot.docs.map((doc: { data: () => VehicleMakeType; id: any }) => ({
           ...(doc.data() as VehicleMakeType),
@@ -67,22 +66,13 @@ export class VehicleMakeStore {
     return unsubscribe;
   }
 
-  async fetchMakesSorted() {
-    const sortOrder = this.isSortingAZ ? "asc" : "desc";
-    const allMakes = await this.vehicleMakeService.fetchSortedMakes(sortOrder);
-    runInAction(() => {
-      this.makes = allMakes.slice(0, this.pageSize);
-      this.totalMakes = allMakes.length;
-    });
-  }
-
   async fetchMakesWithPagination(page: number) {
     const start = (page - 1) * this.pageSize;
     const end = start + this.pageSize;
 
     const sortOrder = this.isSortingAZ ? "asc" : "desc";
 
-    const sortedMakes = await getDocsSorted<VehicleMakeType>("vehicleMake", "name", sortOrder);
+    const sortedMakes = await this.vehicleMakeService.fetchSortedMakes(sortOrder);
 
     runInAction(() => {
       this.makes = sortedMakes.slice(start, end);

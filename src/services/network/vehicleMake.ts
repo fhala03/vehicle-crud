@@ -1,4 +1,4 @@
-import { createDoc, deleteDocById, getDocById, getDocsSorted, updateDocById } from "@/services/network/base";
+import { createDoc, deleteDocById, updateDocById, getDocById, getDocsSorted, onSnapshotListener } from "@/services/network/base";
 import { VehicleMakeType } from "@/utils/types";
 
 export class VehicleMakeService {
@@ -28,7 +28,10 @@ export class VehicleMakeService {
   }
 
   async fetchSortedMakes(sortOrder: "asc" | "desc"): Promise<VehicleMakeType[]> {
-    const allMakes = await getDocsSorted<VehicleMakeType>("vehicleMake", "name", sortOrder);
-    return allMakes;
+    return await getDocsSorted("vehicleMake", "name", sortOrder);
+  }
+
+  subscribeToMakes(callback: (snapshot: any) => void) {
+    return onSnapshotListener("vehicleMake", callback);
   }
 }

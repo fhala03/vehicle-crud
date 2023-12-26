@@ -9,7 +9,7 @@ const VehicleMakePage = observer(() => {
   const { vehicleMakeStore } = useRootStore();
 
   useEffect(() => {
-    vehicleMakeStore.fetchMakesSorted();
+    vehicleMakeStore.fetchMakes();
   }, [vehicleMakeStore]);
 
   const handleSortChange = async () => {
@@ -17,7 +17,7 @@ const VehicleMakePage = observer(() => {
 
     vehicleMakeStore.isSortingAZ = !vehicleMakeStore.isSortingAZ;
 
-    await vehicleMakeStore.fetchMakesSorted();
+    await vehicleMakeStore.fetchMakes();
 
     if (previousLastVisibleItemIndex !== null) {
       const newLastVisibleItemIndex = Math.min(previousLastVisibleItemIndex, vehicleMakeStore.totalMakes - 1);
