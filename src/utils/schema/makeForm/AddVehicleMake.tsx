@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-import { makeForm } from ".";
+import { makeForm } from "..";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
