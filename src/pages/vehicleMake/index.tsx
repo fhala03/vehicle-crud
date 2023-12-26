@@ -4,13 +4,12 @@ import { useRootStore } from "@/stores/rootStore";
 import VehicleMakeCard from "@/components/vehicleMake/vehicleMakeCard";
 import AddVehicleMake from "@/components/vehicleMake/addVehicleMake";
 import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
 
 const VehicleMakePage = observer(() => {
   const { vehicleMakeStore } = useRootStore();
 
   useEffect(() => {
-    vehicleMakeStore.fetchMakesSortedAZ();
+    vehicleMakeStore.fetchMakesSorted();
   }, [vehicleMakeStore]);
 
   const handleSortChange = async () => {
@@ -18,13 +17,7 @@ const VehicleMakePage = observer(() => {
 
     vehicleMakeStore.isSortingAZ = !vehicleMakeStore.isSortingAZ;
 
-    if (vehicleMakeStore.isSortingAZ) {
-      await vehicleMakeStore.fetchMakesSortedAZ();
-      toast.info("Sorted from A to Z");
-    } else {
-      await vehicleMakeStore.fetchMakesSortedZA();
-      toast.info("Sorted from Z to A");
-    }
+    await vehicleMakeStore.fetchMakesSorted();
 
     if (previousLastVisibleItemIndex !== null) {
       const newLastVisibleItemIndex = Math.min(previousLastVisibleItemIndex, vehicleMakeStore.totalMakes - 1);

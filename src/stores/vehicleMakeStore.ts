@@ -1,7 +1,8 @@
 import { makeObservable, observable, action, runInAction } from "mobx";
 import { VehicleMakeType } from "@/utils/types";
 
-import { createDoc, deleteDocById, getDocById, getDocsSorted, onSnapshotListener, updateDocById } from "@/services/network/base";
+import { getDocsSorted, onSnapshotListener } from "@/services/network/base";
+import { VehicleMakeService } from "@/services/network/vehicleMake";
 
 export class VehicleMakeStore {
   makes: VehicleMakeType[] = [];
@@ -10,6 +11,7 @@ export class VehicleMakeStore {
   totalMakes = 0;
   isSortingAZ: boolean = true;
   lastVisibleItemIndex: number | null = null;
+  vehicleMakeService: VehicleMakeService;
 
   constructor() {
     makeObservable(this, {
@@ -24,29 +26,29 @@ export class VehicleMakeStore {
       isSortingAZ: observable,
     });
 
+    this.vehicleMakeService = new VehicleMakeService();
     this.fetchMakes();
   }
 
   async addMake(newMake: Omit<VehicleMakeType, "id">) {
-    await createDoc({ collectionName: "vehicleMake", doc: newMake });
+    await this.vehicleMakeService.addMake(newMake);
   }
 
   async deleteMake(id: string) {
-    const currentPageBeforeDelete = this.currentPage;
-    await deleteDocById("vehicleMake", id);
-    await this.fetchMakesWithPagination(currentPageBeforeDelete);
-    if (this.makes.length === 0 && currentPageBeforeDelete > 1) {
-      this.currentPage = currentPageBeforeDelete - 1;
+    await this.vehicleMakeService.deleteMake(id);
+    await this.fetchMakesWithPagination(this.currentPage);
+    if (this.makes.length === 0 && this.currentPage > 1) {
+      this.currentPage = this.currentPage - 1;
       await this.fetchMakesWithPagination(this.currentPage);
     }
   }
 
   async updateMake(id: string, newFields: Record<string, any>) {
-    await updateDocById("vehicleMake", id, newFields);
+    await this.vehicleMakeService.updateMake(id, newFields);
   }
 
   async getMakeById(id: string): Promise<VehicleMakeType | null> {
-    return await getDocById("vehicleMake", id);
+    return await this.vehicleMakeService.getMakeById(id);
   }
 
   async fetchMakes() {
@@ -65,25 +67,22 @@ export class VehicleMakeStore {
     return unsubscribe;
   }
 
-  async fetchMakesSortedAZ() {
-    const allMakes = await getDocsSorted<VehicleMakeType>("vehicleMake", "name", "asc");
-    this.makes = allMakes.slice(0, this.pageSize);
-    this.totalMakes = allMakes.length;
-  }
-
-  async fetchMakesSortedZA() {
-    const allMakes = await getDocsSorted<VehicleMakeType>("vehicleMake", "name", "desc");
-    this.makes = allMakes.slice(0, this.pageSize);
-    this.totalMakes = allMakes.length;
+  async fetchMakesSorted() {
+    const sortOrder = this.isSortingAZ ? "asc" : "desc";
+    const allMakes = await this.vehicleMakeService.fetchSortedMakes(sortOrder);
+    runInAction(() => {
+      this.makes = allMakes.slice(0, this.pageSize);
+      this.totalMakes = allMakes.length;
+    });
   }
 
   async fetchMakesWithPagination(page: number) {
     const start = (page - 1) * this.pageSize;
     const end = start + this.pageSize;
 
-    const sortedMakes = this.isSortingAZ
-      ? await getDocsSorted<VehicleMakeType>("vehicleMake", "name", "asc")
-      : await getDocsSorted<VehicleMakeType>("vehicleMake", "name", "desc");
+    const sortOrder = this.isSortingAZ ? "asc" : "desc";
+
+    const sortedMakes = await getDocsSorted<VehicleMakeType>("vehicleMake", "name", sortOrder);
 
     runInAction(() => {
       this.makes = sortedMakes.slice(start, end);
@@ -92,11 +91,6 @@ export class VehicleMakeStore {
   }
 
   async getMakeDetailsById(id: string): Promise<Pick<VehicleMakeType, "id" | "name" | "abrv"> | null> {
-    const make = await this.getMakeById(id);
-    if (make) {
-      const { id, name, abrv } = make;
-      return { id, name, abrv };
-    }
-    return null;
+    return await this.vehicleMakeService.getMakeDetailsById(id);
   }
 }
