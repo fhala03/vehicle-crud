@@ -2,13 +2,16 @@ import { createContext, useContext } from "react";
 import { VehicleMakeStore } from "./vehicleMakeStore";
 import { VehicleModelStore } from "./vehicleModelStore";
 
+export const vehicleMakeStore = new VehicleMakeStore();
+export const vehicleModelStore = new VehicleModelStore();
+
 export class RootStore {
   vehicleMakeStore: VehicleMakeStore;
   vehicleModelStore: VehicleModelStore;
 
   constructor() {
-    this.vehicleMakeStore = new VehicleMakeStore();
-    this.vehicleModelStore = new VehicleModelStore();
+    this.vehicleMakeStore = vehicleMakeStore;
+    this.vehicleModelStore = vehicleModelStore;
   }
 }
 

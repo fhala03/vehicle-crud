@@ -1,10 +1,13 @@
 import { Button } from "@/components/ui/button";
+import { makeForm } from "@/utils/schema";
+import { MakeForm } from "@/utils/schema/nform";
 import { GitHubLogoIcon, LinkedInLogoIcon } from "@radix-ui/react-icons";
 import { Link } from "react-router-dom";
 
 const LandingPage = () => {
   return (
     <div className="md:pt-32 pt-12">
+      <MakeForm form={makeForm} />
       <div className="flex lg:flex-row flex-col lg:items-center">
         <div className="w-full max-w-xl mx-auto lg:order-1 lg:w-1/2">
           <h1 className="text-4xl font-bold md:text-6xl xl:text-7xl">Where dreams meet the road</h1>
