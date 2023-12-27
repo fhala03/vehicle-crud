@@ -3,17 +3,17 @@ import { makeForm } from "..";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { vehicleMakeStore } from "@/stores/rootStore";
+import { vehicleModelStore } from "@/stores/rootStore";
 import { toast } from "sonner";
 
-export const EditMakeAbrvForm = observer(
-  ({ form, onFinish, makeId }: { form: typeof makeForm; onFinish: () => void; makeId: string }) => {
+export const EditModelAbrvForm = observer(
+  ({ form, onFinish, modelId }: { form: typeof makeForm; onFinish: () => void; modelId: string }) => {
     form.$hooks = {
       onSuccess(form: any) {
         const values = form.values();
-        return vehicleMakeStore.updateMake(makeId, values).then(() => {
+        return vehicleModelStore.updateModel(modelId, values).then(() => {
           form.clear();
-          toast.info("Vehicle make abrv changed");
+          toast.info("Vehicle model abrv changed");
           return;
         });
       },

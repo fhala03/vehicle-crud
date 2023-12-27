@@ -1,32 +1,15 @@
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "../ui/button";
 import { useState } from "react";
-import { Label } from "@radix-ui/react-label";
-import { Input } from "../ui/input";
-import { useRootStore } from "@/stores/rootStore";
-import { toast } from "sonner";
-import { abrvSchema } from "@/utils/schema";
+import { editModelAbrvForm } from "@/utils/schema";
+import { EditModelAbrvForm } from "@/utils/schema/modelForm/editModelAbrv";
 
 interface EditVehicleModelNameProps {
   modelId: string;
 }
 
 const EditVehicleModelAbrv = ({ modelId }: EditVehicleModelNameProps) => {
-  const { vehicleModelStore } = useRootStore();
-  const [newAbrv, setNewAbrv] = useState("");
   const [open, setOpen] = useState(false);
-
-  const handleConfirm = async () => {
-    try {
-      abrvSchema.parse(newAbrv);
-
-      await vehicleModelStore.updateModel(modelId, { abrv: newAbrv });
-      toast.success("Vehicle abbreviation has been updated");
-      setOpen(false);
-    } catch (error) {
-      toast.error("There has been an error while updating vehicle model");
-    }
-  };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -40,23 +23,13 @@ const EditVehicleModelAbrv = ({ modelId }: EditVehicleModelNameProps) => {
             Change the abbreviation of the Vehicle Model. Click confirm when you are done with your changes.
           </DialogDescription>
         </DialogHeader>
-        <form onSubmit={(e) => e.preventDefault()} className="flex flex-col gap-4">
-          <div>
-            <Label className="mb-1 flex justify-end text-xs font-normal text-foreground/40">Max Characters : 25</Label>
-            <Input
-              required
-              className="border-none focus-visible:ring-0"
-              type="text"
-              placeholder="Abbreviation"
-              maxLength={30}
-              value={newAbrv}
-              onChange={(e) => setNewAbrv(e.target.value)}
-            />
-          </div>
-          <Button type="button" onClick={handleConfirm}>
-            Confirm
-          </Button>
-        </form>
+        <EditModelAbrvForm
+          modelId={modelId}
+          onFinish={() => {
+            setOpen(false);
+          }}
+          form={editModelAbrvForm}
+        />
       </DialogContent>
     </Dialog>
   );

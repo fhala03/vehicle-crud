@@ -61,6 +61,44 @@ export const editMakeNameForm = new Form(
   }
 );
 
+export const editModelNameForm = new Form(
+  {
+    fields: [
+      {
+        name: "name",
+        label: "Name",
+        placeholder: "Enter name",
+      },
+    ],
+  },
+  {
+    plugins: createZodPlugin(
+      z.object({
+        name: z.string().min(4),
+      })
+    ),
+  }
+);
+
+export const editModelAbrvForm = new Form(
+  {
+    fields: [
+      {
+        name: "abrv",
+        label: "Abrv",
+        placeholder: "Enter abrv",
+      },
+    ],
+  },
+  {
+    plugins: createZodPlugin(
+      z.object({
+        abrv: z.string().min(4),
+      })
+    ),
+  }
+);
+
 export const editMakeAbrvForm = new Form(
   {
     fields: [

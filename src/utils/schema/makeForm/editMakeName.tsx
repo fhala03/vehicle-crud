@@ -13,7 +13,7 @@ export const EditMakeNameForm = observer(
         const values = form.values();
         return vehicleMakeStore.updateMake(makeId, values).then(() => {
           form.clear();
-          toast("Vehicle name changed");
+          toast.info("Vehicle make name changed");
           return;
         });
       },
