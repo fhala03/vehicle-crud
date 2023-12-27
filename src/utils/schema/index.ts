@@ -26,7 +26,7 @@ export const makeForm = new Form(
     plugins: createZodPlugin(
       z.object({
         name: z.string().min(4),
-        abrv: z.string().min(4),
+        abrv: z.string().min(2),
       })
     ),
     hooks: {
@@ -93,7 +93,7 @@ export const editModelAbrvForm = new Form(
   {
     plugins: createZodPlugin(
       z.object({
-        abrv: z.string().min(4),
+        abrv: z.string().min(2),
       })
     ),
   }
@@ -112,7 +112,7 @@ export const editMakeAbrvForm = new Form(
   {
     plugins: createZodPlugin(
       z.object({
-        abrv: z.string().min(4),
+        abrv: z.string().min(2),
       })
     ),
   }
