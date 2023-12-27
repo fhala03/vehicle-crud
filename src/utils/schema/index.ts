@@ -34,7 +34,7 @@ export const makeForm = new Form(
         const values = form.values();
         return vehicleMakeStore.addMake(values).then(() => {
           form.clear();
-          toast("Vehicle added");
+          toast.info("Vehicle make added");
           return;
         });
       },
